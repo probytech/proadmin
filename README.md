@@ -48,4 +48,59 @@ composer require probytech/proadmin
 php artisan proadmin:install
 ```
 
+- Add class aliases in bottom of file config/app.php
+```bash
+'Image' => Intervention\Image\Facades\Image::class,
+```
+
+- Publish the packages config and assets
+```bash
+php artisan vendor:publish --tag=lfm_config 
+php artisan vendor:publish --tag=lfm_public
+```
+
+- Run commands to clear cache
+```bash
+php artisan route:clear
+php artisan config:clear
+```
+
+- In "config/lfm.php"
+```bash
+// in any place
+add line: 'middlewares' => ['admin'],
+
+change line: ('disk' => 'public',) to ('disk' => 'lfm',)
+
+//add category of folder
+in folder_categories (48 line)
+
+'admin' => [
+    'folder_name'  => 'vendor/proadmin/icons',
+    'startup_view' => 'list',
+    'max_size'     => 50000, // size in KB
+    'valid_mime'   => [
+        'image/jpeg',
+        'image/pjpeg',
+        'image/png',
+        'image/gif',
+        'image/svg+xml',
+        'application/pdf',
+        'text/plain',
+    ],
+],
+```
+
+- Add disk "config/filesystems.php"
+```bash
+// add like line 44 from:
+'lfm' => [
+    'driver' => 'local',
+    'root' => public_path(),
+    'url' => env('APP_URL'),
+    'visibility' => 'public',
+],
+```
+
+
 Enjoy 🎉
