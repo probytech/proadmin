@@ -1,0 +1,31 @@
+{
+    "name": "probytech/proadmin",
+    "description": "Admin panel by probytech",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "Probotiuk Anatoliy",
+        "email": "anatoliy.probotiuk@gmail.com",
+        "homepage": "https://probotiuk.com",
+        "role": "CEO"
+    }],
+    "require": {
+        "doctrine/dbal": "^2.9",
+        "unisharp/laravel-filemanager": "2.6.0",
+        "mobiledetect/mobiledetectlib": "^3.74",
+        "maatwebsite/excel": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Probytech\\Proadmin\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Probytech\\Proadmin\\ProadminServiceProvider"
+            ],
+            "aliases": {}
+        }
+    }
+}
