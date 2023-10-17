@@ -4,6 +4,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="robots" content="noindex" />
 
+<link rel="shortcut icon" href="/vendor/proadmin/images/favicon.png" type="image/x-icon">
+
 <link href="/vendor/proadmin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <script src="/vendor/proadmin/js/vue.js"></script>
