@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use App\Proadmin\Commands\ProadminTranslate;
 use App\Proadmin\Facades\Single as SingleFacade;
-use App\Proadmin\Facades\Lang;
+use App\Proadmin\Facades\Lang as LangFacade;
 use App\Proadmin\Helpers\JSAssembler;
 use App\Proadmin\Helpers\ResizeImg;
 use App\Proadmin\Helpers\Field;
@@ -83,7 +83,7 @@ class ProadminServiceProvider extends ServiceProvider
 			$loader = AliasLoader::getInstance();
 
 			$loader->alias('Single', 		SingleFacade::class);
-			$loader->alias('Lang', 			Lang::class);
+			$loader->alias('Lang', 			LangFacade::class);
 			$loader->alias('JSAssembler', 	JSAssembler::class);
 			$loader->alias('ResizeImg', 	ResizeImg::class);
 			$loader->alias('Field', 		Field::class);

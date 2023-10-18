@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="menu-item-title">Parent</label>
+				<label class="menu-item-title">Dropdown</label>
 				<div class="menu-item-input">
 					<div class="select-wrapper">
 						<select v-model="single_item.dropdown_id" class="form-control">

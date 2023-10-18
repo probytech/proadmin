@@ -10,6 +10,18 @@ class Menu extends Model
 {
     protected $table = 'menu';   
 
+	protected $fillable = [
+		'title',
+		'table_name',
+		'fields',
+		'is_dev',
+		'multilanguage',
+		'is_soft_delete',
+		'sort',
+		'dropdown_id',
+		'icon',
+	];
+
     public function getTitlesMenuByTable($table)
 	{
         $menu = $this->select('title', 'fields')

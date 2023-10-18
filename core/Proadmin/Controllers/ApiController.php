@@ -4,6 +4,8 @@ namespace App\Proadmin\Controllers;
 
 use App\Proadmin\Models\Menu;
 use App\Proadmin\Models\SinglePage;
+use App\Proadmin\Responses\JsonResponse;
+use App\Proadmin\Services\TableService;
 use DB;
 use Schema;
 use Validator;
@@ -11,6 +13,13 @@ use Lang;
 
 class ApiController extends \App\Http\Controllers\Controller
 {
+	private $tableService;
+
+	public function __construct(TableService $tableService)
+	{
+		$this->tableService = $tableService;
+	}
+
 	public function updateDropdown()
 	{
 		$dropdown = request()->get('dropdown');
@@ -44,7 +53,7 @@ class ApiController extends \App\Http\Controllers\Controller
 			'multilanguage',
 			'is_soft_delete',
 			'sort',
-			'parent AS dropdown_id',
+			'dropdown_id',
 			'icon',
 			DB::raw('"multiple" AS type')
 		)->get();
@@ -124,7 +133,7 @@ class ApiController extends \App\Http\Controllers\Controller
 		$editables = $this->getVal('editables', '');   // one to many (editable)
 		$join = $this->getVal('join', '');   // one to many (editable)
 
-		$full_table = $this->getTable(
+		$full_table = $this->tableService->getTable(
 			$this->getVal('table'),
 			$this->getVal('language')
 		);
@@ -206,7 +215,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 				$tbl = $editable->table;
 
-				$vals = DB::table($this->getTable(
+				$vals = DB::table($this->tableService->getTable(
 					$editable->table,
 					$this->getVal('language')
 				))
@@ -245,273 +254,6 @@ class ApiController extends \App\Http\Controllers\Controller
 		return $default;
 	}
 
-	private function getTables($entity, $multilanguage = -1)
-	{
-		$tables = [];
-
-		if ($multilanguage == -1) {
-
-			$menu = DB::table('menu')
-			->select('multilanguage', 'table_name')
-			->when(is_numeric($entity), function($q) use ($entity){
-				$q->where('id', $entity);
-			})
-			->when(!is_numeric($entity), function($q) use ($entity){
-				$q->where('table_name', $entity);
-			})
-			->first();
-
-			$title = $menu->table_name;
-			$multilanguage = $menu->multilanguage;
-
-		} else {
-			$title = $entity;
-		}
-
-		if ($multilanguage == 1) {
-
-			$langs = DB::table('languages')->get();
-			foreach ($langs as $lang) {
-				$tables[] = $title.'_'.$lang->tag;
-			}
-			
-		} else {
-
-			$tables[] = $title;
-		}
-
-		return $tables;
-	}
-
-	private function getTable($table, $lang)
-	{
-		$element = DB::table('menu')
-		->select('multilanguage')
-		->where('table_name', $table)
-		->first();
-
-		if (empty($element))
-			return $table;
-
-		if ($element->multilanguage == 1 && !empty($lang))
-			return $table.'_'.$lang;
-		return $table;
-	}
-
-	public function dbCreateTable()
-	{
-		$r = request();
-
-		$tables = $this->getTables($r->get('table_name'), $r->get('multilanguage'));
-
-		foreach ($tables as $table) {
-
-			Schema::create($table, function ($table) use ($r) {
-				$table->bigIncrements('id');
-				
-				foreach (json_decode($r->get('fields')) as $field) {
-					$this->addField($table, $field);
-				}
-
-				$table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
-				$table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-
-				if ($r->get('is_soft_delete') == 1)
-					$table->timestamp('deleted_at')->nullable();
-			});
-		}
-
-
-		DB::table('menu')->insert([
-			'title'             => $r->get('title'),
-			'table_name'        => $r->get('table_name'),
-			'fields'            => $r->get('fields'),
-			'is_dev'            => $r->get('is_dev'),
-			'multilanguage'     => $r->get('multilanguage'),
-			'is_soft_delete'    => $r->get('is_soft_delete'),
-			'sort'              => $r->get('sort'),
-			'parent'            => (empty($r->get('parent'))) ? 0 : $r->get('parent'),
-			'icon'				=> $r->get('icon'),
-		]);
-
-		return 'Success';
-	}
-
-	private function addField(&$table, $field)
-	{
-		if ($field->type == 'enum' || $field->type == 'password' || $field->type == 'text' || $field->type == 'email' || $field->type == 'color' || $field->type == 'file' || $field->type == 'photo') {
-
-			$table->string($field->db_title);
-
-		} else if ($field->type == 'number' || $field->type == 'checkbox') {
-
-			$table->integer($field->db_title);
-			
-		} else if ($field->type == 'date') {
-
-			$table->date($field->db_title);
-			
-		} else if ($field->type == 'datetime') {
-
-			$table->dateTime($field->db_title);
-			
-		} else if ($field->type == 'translater' || $field->type == 'gallery' || $field->type == 'repeat' || $field->type == 'textarea' || $field->type == 'ckeditor') {
-
-			$table->text($field->db_title);
-			
-		} else if ($field->type == 'money') {
-
-			$table->decimal($field->db_title, 15, 2);
-			
-		} else if ($field->type == 'relationship') {
-
-			if ($field->relationship_count == 'single') {
-
-				$table->integer('id_'.$field->relationship_table_name);
-
-			} else if ($field->relationship_count == 'many') {
-
-				$r = request();
-
-				$table_name = $r->get('table_name').'_'.$field->relationship_table_name;
-
-				if (!Schema::hasTable($table_name)) {
-					Schema::create($table_name, function ($table) use ($r, $field) {
-						$table->bigIncrements('id');
-						
-						$col_first = 'id_'.$r->get('table_name');
-						$col_last = 'id_'.$field->relationship_table_name;
-
-						if ($col_first == $col_last)
-							$col_last = $col_last.'_other';
-
-						$table->integer($col_first);
-						$table->integer($col_last);
-					});
-				}
-			}
-			// $field->relationship_view_field
-		}
-	}
-
-	public function dbRemoveTable()
-	{
-		$r = request();
-
-		$tables = $this->getTables($r->get('id'));
-
-		foreach ($tables as $table)
-			Schema::dropIfExists($table);
-
-		DB::table('menu')->where('id', $r->get('id'))->delete();
-
-		return 'Success';
-	}
-
-	public function dbUpdateTable()
-	{
-		$r = request();
-
-		$fields_new = json_decode($r->get('fields'));
-
-		$fields_curr = json_decode(DB::table('menu')
-		->select('fields')
-		->where('id', $r->get('id'))
-		->first()
-		->fields);
-		
-		$tables = $this->getTables($r->get('table_name'));
-
-		foreach ($tables as $table) {
-
-			$this->removeFields($table, json_decode($r->get('to_remove')), $fields_curr);
-			$this->renameFields($table, $fields_new, $fields_curr);
-			$this->addFields($table, $fields_new, $fields_curr);
-			
-			DB::table('menu')->
-			where('table_name', $r->get('table_name'))->
-			update([
-				'title'             => $r->get('title'),
-				'fields'            => $r->get('fields'),
-				'is_dev'            => $r->get('is_dev'),
-				'is_soft_delete'    => $r->get('is_soft_delete'),
-				'sort'              => $r->get('sort'),
-				'parent'            => $r->get('parent'),
-				'icon'             	=> $r->get('icon'),
-			]);
-		}
-
-		return 'Success';
-	}
-
-	private function removeFields($table_name, $array_ids_remove, $fields_curr)
-	{
-		foreach ($array_ids_remove as $id) {
-			foreach ($fields_curr as $field) {
-				if ($field->id == $id) {
-					Schema::table($table_name, function($table) use ($field) {
-						if ($field->type == 'relationship' && $field->relationship_count == 'single'){
-
-							$table->dropColumn('id_'.$field->relationship_table_name);
-
-						} else if ($field->type == 'relationship' && $field->relationship_count == 'many'){
-
-							$r = request();
-							Schema::dropIfExists($r->get('table_name').'_'.$field->relationship_table_name);
-
-						} else if ($field->type == 'relationship' && $field->relationship_count == 'editable') {
-
-						} else {
-
-							$table->dropColumn($field->db_title);
-						}
-					});
-					continue;
-				}
-			}
-		}
-	}
-
-	private function renameFields($table_name, $fields_new, $fields_curr)
-	{
-		foreach ($fields_new as $new) {
-			foreach ($fields_curr as $curr) {
-				
-				if ($new->type == 'relationship' || $curr->type == 'relationship')
-					continue;
-
-				if ($new->id == $curr->id && $new->db_title != $curr->db_title) {
-					Schema::table($table_name, function($table) use ($new, $curr) {
-						$table->renameColumn($curr->db_title, $new->db_title);
-					});
-					continue;
-				}
-			}
-		}
-	}
-
-	private function addFields($table_name, $fields_new, $fields_curr)
-	{
-		foreach ($fields_new as $new) {
-
-			$is_new = true;
-
-			foreach ($fields_curr as $curr) {
-				if ($new->id == $curr->id) {
-
-					$is_new = false;
-					continue;
-				}
-			}
-
-			if ($is_new) {
-				Schema::table($table_name, function($table) use ($new) {
-					$this->addField($table, $new);
-				});
-			}
-		}
-	}
-
 	public function dbCopy()
 	{
 		$input = request()->all();
@@ -523,7 +265,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 	private function dbCopyFields($input_id, $input_table)
 	{
-		$tables = $this->getTables($input_table);
+		$tables = $this->tableService->getTables($input_table);
 
 		foreach ($tables as $table) {
 
@@ -616,7 +358,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 			foreach ($editable as $table_name) {
 
-				$tables = $this->getTables($table_name);
+				$tables = $this->tableService->getTables($table_name);
 
 				$parents = [];
 
@@ -706,7 +448,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 		} else if ($menu->multilanguage == 1 && $field->lang == 0) {
 
-			foreach ($this->getTables($input['table']) as $tbl) {
+			foreach ($this->tableService->getTables($input['table']) as $tbl) {
 
 				DB::table($tbl)
 				->where('id', $input['id'])
@@ -724,7 +466,7 @@ class ApiController extends \App\Http\Controllers\Controller
 			]);
 		}
 
-		return $this->response();
+		return JsonResponse::response();
 	}
 
 	private function dbRemoveEditable($id, $table)
@@ -748,7 +490,7 @@ class ApiController extends \App\Http\Controllers\Controller
 	
 			foreach ($editable as $table_name) {
 	
-				$tables = $this->getTables($table_name);
+				$tables = $this->tableService->getTables($table_name);
 	
 				$parents = []; 
 	
@@ -821,7 +563,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 		if ($lang != '') {
 
-			foreach ($this->getTables($r->get('table_name')) as $table) {
+			foreach ($this->tableService->getTables($r->get('table_name')) as $table) {
 
 				DB::table($table)
 				->where('id', $id)
@@ -851,7 +593,7 @@ class ApiController extends \App\Http\Controllers\Controller
 		if ($lang != '') {
 			foreach ($ids as $id) {
 
-				foreach ($this->getTables($r->get('table_name')) as $table) {
+				foreach ($this->tableService->getTables($r->get('table_name')) as $table) {
 
 					DB::table($table)
 					->where('id', $id)
@@ -907,7 +649,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 		$this->setDynamicFields($input);
 
-		return $this->response();
+		return JsonResponse::response();
 	}
 
 	private function setDynamicFields($input, $parent_table = false, $parent_id = false)
@@ -985,7 +727,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 			if ($input['id'] == 0) {
 
-				$tables = $this->getTables($input['table']);
+				$tables = $this->tableService->getTables($input['table']);
 
 				foreach ($tables as $table) {
 					
@@ -1003,7 +745,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 			} else {
 
-				$table_main = $this->getTable(
+				$table_main = $this->tableService->getTable(
 					$input['table'],
 					$input['language']
 				);
@@ -1014,7 +756,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 				if ($menu->multilanguage == 1 && !empty($update_multilanguage)) {
 
-					foreach ($this->getTables($input['table']) as $table) {
+					foreach ($this->tableService->getTables($input['table']) as $table) {
 
 						if ($table_main == $table)
 							continue;
@@ -1059,7 +801,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 				} else if ($field->relationship_count == 'editable') {
 
-					$editable_ids = DB::table($this->getTable(
+					$editable_ids = DB::table($this->tableService->getTable(
 						$field->relationship_table_name,
 						$input['language']
 					))
@@ -1072,7 +814,7 @@ class ApiController extends \App\Http\Controllers\Controller
 					$current_ids = array_column($field->value, 'id');
 					$diff_ids = array_diff($editable_ids->all(), $current_ids);
 
-					DB::table($this->getTable(
+					DB::table($this->tableService->getTable(
 						$field->relationship_table_name,
 						$input['language']
 					))
@@ -1108,7 +850,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 		$fields = $this->getDynamicFields($input);
 
-		return $this->response($fields);
+		return JsonResponse::response($fields);
 	}
 
 	private function getDynamicFields($input)
@@ -1117,7 +859,7 @@ class ApiController extends \App\Http\Controllers\Controller
 		->where('table_name', $input['table'])
 		->first();
 
-		$instance = DB::table($this->getTable(
+		$instance = DB::table($this->tableService->getTable(
 			$input['table'],
 			$input['language']
 		))
@@ -1133,7 +875,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 				if ($field->relationship_count != 'editable') {
 
-					$field->values = DB::table($this->getTable(
+					$field->values = DB::table($this->tableService->getTable(
 						$field->relationship_table_name, 
 						$input['language']
 					))
@@ -1142,7 +884,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 					//for filters_fields
 					if ($field->relationship_table_name == 'filter_fields'){
-						$field->values = DB::table($this->getTable(
+						$field->values = DB::table($this->tableService->getTable(
 							$field->relationship_table_name, 
 							$input['language']
 						))
@@ -1205,7 +947,7 @@ class ApiController extends \App\Http\Controllers\Controller
 
 					if ($input['id'] != 0) {
 
-						$editable_ids = DB::table($this->getTable(
+						$editable_ids = DB::table($this->tableService->getTable(
 							$field->relationship_table_name,
 							$input['language']
 						))
@@ -1528,9 +1270,7 @@ class ApiController extends \App\Http\Controllers\Controller
 			}
 		}
 
-		
-
-		return $this->response([
+		return JsonResponse::response([
 			'firstblock' => $alldata,
             'popproducts' => $sorted_popular_products,
             'graph1' => $graph1,
