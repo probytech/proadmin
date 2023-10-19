@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Proadmin\Migrations;
+namespace App\Proadmin\Generators\Migrations;
 
-class Migration
+class MigrationGenerator
 {
     public function create($table, $type = '', $fields = '')
     {
@@ -10,7 +10,8 @@ class Migration
         $path = $this->getPath($type.'_'.$table);
 
         file_put_contents(
-            $path, $this->populateStub($stub, $table, $fields)
+            $path, 
+            $this->populateStub($stub, $table, $fields)
         );
     }
 

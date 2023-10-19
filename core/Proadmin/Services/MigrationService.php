@@ -1,17 +1,18 @@
 <?php 
+
 namespace App\Proadmin\Services;
 
-use App\Proadmin\Migrations\Migration;
+use App\Proadmin\Generators\Migrations\MigrationGenerator;
 use App\Proadmin\Models\Menu;
 use Artisan;
 
 class MigrationService
 {
-	protected $migrator;
+	protected $generator;
 
-	public function __construct(Migration $migrator)
+	public function __construct(MigrationGenerator $generator)
 	{
-		$this->migrator = $migrator;
+		$this->generator = $generator;
 	}
 
 	public function create($table, $data)
@@ -36,7 +37,7 @@ class MigrationService
 			$fields[] = '$table->timestamp("deleted_at")->nullable();';
 		}
 
-		$this->migrator->create($table, 'create', implode("\n\t\t\t", $fields));
+		$this->generator->create($table, 'create', implode("\n\t\t\t", $fields));
 
         Artisan::call('migrate');
 	}
@@ -59,7 +60,7 @@ class MigrationService
 		));
 
 		if (!empty($fields)) {
-			$this->migrator->create($table, 'update', implode("\n\t\t\t", $fields));
+			$this->generator->create($table, 'update', implode("\n\t\t\t", $fields));
 		}
 
         Artisan::call('migrate');
@@ -67,7 +68,7 @@ class MigrationService
 
 	public function delete($table)
 	{
-		$this->migrator->create($table, 'delete');
+		$this->generator->create($table, 'delete');
         Artisan::call('migrate');
 	}
 
@@ -198,7 +199,7 @@ class MigrationService
 					'$table->bigInteger("'.$colLast.'");',
 				];
 
-				$this->migrator->create($tableName, 'create', implode("\n\t\t\t", $fields));
+				$this->generator->create($tableName, 'create', implode("\n\t\t\t", $fields));
 			}
 		}
 

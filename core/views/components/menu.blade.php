@@ -474,7 +474,7 @@
 				if (confirm("Are you sure?")) {
 
 					const response = await req.post('/admin/db-remove-table', {
-						id: this.menu_item_edit.id,
+						table_name: this.menu_item_edit.table_name,
 					})
 					
 					if (response.success) {

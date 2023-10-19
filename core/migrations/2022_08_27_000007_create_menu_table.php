@@ -25,6 +25,7 @@ return new class extends Migration
 			$table->integer('sort');
 			$table->integer('dropdown_id')->default(0);
 			$table->string('icon')->default('')->nullable();
+			$table->string("model");
 			$table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 		});
@@ -37,6 +38,8 @@ return new class extends Migration
 			'multilanguage'     => '0',
 			'is_soft_delete'    => '0',
 			'sort'              => '0',
+			'icon'				=> '',
+			'model'				=> '',
 		]);
 
 		DB::table('menu')->insert([
@@ -47,6 +50,8 @@ return new class extends Migration
 			'multilanguage'     => '0',
 			'is_soft_delete'    => '0',
 			'sort'              => '1',
+			'icon'				=> '/vendor/proadmin/icons/1/15.svg',
+			'model'				=> '',
 		]);
 	}
 

@@ -1,4 +1,5 @@
 <?php 
+
 namespace App\Proadmin\Services;
 
 use App\Proadmin\Models\Menu;

@@ -24,14 +24,14 @@ class RemoveTableRequest extends FormRequest
 	protected function prepareForValidation()
 	{
 		$this->merge([
-            'id'            => intval($this->id),
+            
         ]);
 	}
 
     public function rules()
 	{
 		$rules = [
-            'id'            => ['required', 'integer'],
+            'table_name'        => ['required'],
         ];
 
         return $rules;

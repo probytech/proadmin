@@ -20,6 +20,7 @@ class Menu extends Model
 		'sort',
 		'dropdown_id',
 		'icon',
+		'model',
 	];
 
     public function getTitlesMenuByTable($table)

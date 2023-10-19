@@ -1,4 +1,5 @@
 <?php 
+
 namespace App\Proadmin\Controllers;
 
 use App\Proadmin\Models\Menu;
@@ -8,21 +9,26 @@ use App\Proadmin\Requests\UpdateTableRequest;
 use App\Proadmin\Services\TableService;
 use App\Proadmin\Responses\JsonResponse;
 use App\Proadmin\Services\MigrationService;
+use App\Proadmin\Services\ModelService;
 
 class MigrationController extends \App\Http\Controllers\Controller
 {
 	private $tableService;
 	private $migrationService;
+	private $modelService;
 
-	public function __construct(TableService $tableService, MigrationService $migrationService)
+	public function __construct(TableService $tableService, MigrationService $migrationService, ModelService $modelService)
 	{
 		$this->tableService = $tableService;
 		$this->migrationService = $migrationService;
+		$this->modelService = $modelService;
 	}
 
 	public function createTable(CreateTableRequest $r)
 	{
 		$data = $r->validated();
+
+		$data['model'] = $this->modelService->create($data);
 
 		$tables = $this->tableService->getTables($data['table_name'], $data['multilanguage']);
 
@@ -39,13 +45,15 @@ class MigrationController extends \App\Http\Controllers\Controller
 	{
 		$data = $r->validated();
 
-		$tables = $this->tableService->getTables($data['id']);
+		$tables = $this->tableService->getTables($data['table_name']);
+
+		$this->modelService->delete($data);
 
 		foreach ($tables as $table) {
 			$this->migrationService->delete($table);
 		}
 
-		Menu::where('id', $data['id'])
+		Menu::where('table_name', $data['table_name'])
 		->delete();
 
 		return JsonResponse::response();
@@ -54,6 +62,8 @@ class MigrationController extends \App\Http\Controllers\Controller
 	public function updateTable(UpdateTableRequest $r)
 	{
 		$data = $r->validated();
+
+		$this->modelService->update($data);
 
 		$tables = $this->tableService->getTables($data['table_name']);
 
