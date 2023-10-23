@@ -23,8 +23,6 @@
 
 @section('javascript')
 
-<script>
-	console.log('HW!')
-</script>
+
 
 @endsection
