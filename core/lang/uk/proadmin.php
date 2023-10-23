@@ -4,6 +4,7 @@ return [
 	'admin_panel' 		=> 'Адмін панель',
 	'dropdown'			=> 'Випадаюче меню',
 	'settings'			=> 'Налаштування',
+	'docs'				=> 'Документація',
 	'menu'				=> 'Меню',
 	'single'			=> 'Single',
 	'sign_out'			=> 'Вийти',

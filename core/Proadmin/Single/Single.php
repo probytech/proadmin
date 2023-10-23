@@ -45,6 +45,10 @@ class Single
 
 					$fields[$field->slug] = $this->formatRepeat($field);
 
+				} elseif ($field->type == 'photo') {
+					
+					$fields[$field->slug] = url($field->value);
+
 				} else {
 
 					$fields[$field->slug] = $field->value;

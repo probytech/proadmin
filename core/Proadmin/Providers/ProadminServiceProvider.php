@@ -74,6 +74,10 @@ class ProadminServiceProvider extends ServiceProvider
 				'view_name' => $view->getName(),
 			]);
 		});
+
+		Route::middleware('api')
+		->prefix('api')
+		->group(base_path('routes/proadmin_api.php'));
 	}
 
 	public function register()

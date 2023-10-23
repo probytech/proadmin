@@ -4,6 +4,7 @@ return [
 	'admin_panel' 		=> 'Admin Panel',
 	'dropdown'			=> 'Dropdown',
 	'settings'			=> 'Settings',
+	'docs'				=> 'Documentation',
 	'menu'				=> 'Menu',
 	'single'			=> 'Single',
 	'sign_out'			=> 'Sign Out',

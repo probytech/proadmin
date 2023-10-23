@@ -4,10 +4,12 @@ namespace App\Proadmin\Controllers;
 
 use App\Proadmin\Requests\SingleEditRequest;
 use App\Proadmin\Requests\SingleRemoveRequest;
+use App\Proadmin\Responses\JsonResponse;
 use App\Proadmin\Services\Single\SingleGetService;
 use App\Proadmin\Services\Single\SingleSetService;
 use App\Proadmin\Single\SingleSaver;
 use Illuminate\Http\Request;
+use Single;
 
 class SingleController extends \App\Http\Controllers\Controller
 {
@@ -15,7 +17,7 @@ class SingleController extends \App\Http\Controllers\Controller
 	{
 		$blocks = $service->get($id);
 
-		return $this->response($blocks);
+		return JsonResponse::response($blocks);
 	}
 	
 	// TODO: validate parameters
@@ -25,7 +27,18 @@ class SingleController extends \App\Http\Controllers\Controller
 
 		$service->set($blocks);
 
-		return $this->response();
+		return JsonResponse::response();
+	}
+
+	public function destroy()
+	{
+	}
+
+	public function first($slug)
+	{
+		return JsonResponse::response([
+			'single'	=> Single::get($slug),
+		]);
 	}
 
 	public function singleEdit(SingleEditRequest $request)
@@ -35,7 +48,7 @@ class SingleController extends \App\Http\Controllers\Controller
 		$saver = new SingleSaver($data);
 		$saver->save($data['blocks']);
 
-		return $this->response();
+		return JsonResponse::response();
 	}
 
 	public function singleRemove(SingleRemoveRequest $request)
@@ -45,6 +58,6 @@ class SingleController extends \App\Http\Controllers\Controller
 		$saver = new SingleSaver($data);
 		$saver->remove();
 
-		return $this->response();
+		return JsonResponse::response();
 	}
 }

@@ -58,6 +58,7 @@
 @include('proadmin.components.singlefields')
 @include('proadmin.components.singlepage')
 @include('proadmin.components.settings')
+@include('proadmin.components.docs')
 @include('proadmin.components.sidebar')
 @include('proadmin.components.menu')
 @include('proadmin.components.edit')
@@ -93,6 +94,10 @@
 				path: '/admin/settings',
 				name: 'settings',
 				component: Vue.options.components['template-settings'],
+			}, {
+				path: '/admin/docs',
+				name: 'docs',
+				component: Vue.options.components['template-docs'],
 			}, {
 				path: '/admin/single/:single_id',
 				name: 'singlepage',

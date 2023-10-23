@@ -2095,3 +2095,160 @@ textarea.form-control {
     margin-top: 1.0417vw;
     margin-bottom: 0.6944vw !important;
 }
+
+.docs-routes-block {
+    margin-bottom: 2.0833vw;
+}
+
+.docs-group-title {
+    margin-bottom: 1.3889vw;
+}
+
+.docs-routes-endpoint {
+    margin-bottom: 1.0417vw;
+    display: flex;
+    text-decoration: none !important;
+}
+
+.docs-route-get {
+    color: hsl(198 93% 60%);
+}
+
+.docs-route-post {
+    color: hsl(158 64% 52%);
+}
+
+.docs-route-put {
+    color: hsl(43 96% 56%);
+}
+
+.docs-route-delete {
+    color: hsl(0 91% 71%);
+}
+
+.docs-routes-endpoint-text {
+    color: #171219;
+}
+
+.docs-route-method {
+    width: 5.5556vw;
+    display: block;
+}
+
+.docs-content {
+    padding: 0 0 0 2.7778vw;
+    margin-left: 2.7778vw;
+    border-left: 1px solid #E3E3E3;
+    flex: 1;
+}
+
+.docs-routes-endpoint-block {
+    padding-top: 1.3889vw;
+    padding-bottom: 1.3889vw;
+    border-bottom: 1px solid #E3E3E3;
+    width: 100%;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.docs-routes-endpoint-desc {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.1111vw;
+    line-height: 1.3889vw;
+    color: #7F7F7F;
+    margin-bottom: 1.3889vw;
+}
+
+.docs-routes-endpoint-desc-block {
+    margin-bottom: 2.0833vw;
+}
+
+.docs-routes-endpoint-desc-block:last-child {
+    margin-bottom: 0;
+}
+
+.docs-routes-endpoint-desc-block-title {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.1111vw;
+    line-height: 1.3889vw;
+    color: #7F7F7F;
+    margin-bottom: 0.6944vw;
+}
+
+.docs-routes-endpoint-desc-block-value {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.9722vw;
+    line-height: 1.25vw;
+    color: #171219;
+}
+
+.docs-route-rule {
+    padding: 0.3472vw 0;
+    border-bottom: 1px solid #E3E3E3;
+    border-left: 1px solid #165BC3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.docs-route-rule-title {
+    color: #165BC3;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.25vw;
+    line-height: 1.5278vw;
+}
+
+.docs-route-rule-title span {
+    margin-right: 0.3472vw;
+}
+
+.docs-route-rule-required {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.1111vw;
+    line-height: 1.3889vw;
+    margin-top: 0.3472vw;
+    padding-left: 1.3889vw;
+}
+
+.docs-route-rule-required.required {
+    color: hsl(0 91% 71%);
+}
+
+.docs-route-rule-required.optional {
+    color: hsl(198 93% 60%);
+}
+
+.docs-route-rule-description {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.1111vw;
+    line-height: 1.3889vw;
+    color: #7F7F7F;
+}
+
+.docs-route-rule-description-wrapper {
+    max-width: 27.7778vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.docs-route-rule-available {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.9722vw;
+    line-height: 1.25vw;
+    margin-top: 0.3472vw;
+}
+
+.docs-block {
+    margin-top: 2.0833vw;
+}

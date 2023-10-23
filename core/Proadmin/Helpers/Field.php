@@ -4,6 +4,29 @@ namespace App\Proadmin\Helpers;
 
 class Field
 {
+	public static function default($type)
+	{
+		return match($type) {
+			'text'			=> '',
+			'textarea'		=> '',
+			'ckeditor'		=> '',
+			'checkbox'		=> 0,
+			'color'			=> '#000000',
+			'date'			=> date('Y-m-d'),
+			'datetime'		=> date('Y-m-d H:i:s'),
+			'relationship'	=> 0,
+			'file'			=> '',
+			'photo'			=> '',
+			'gallery'		=> [],
+			'password'		=> '',
+			'money'			=> 0,
+			'number'		=> 0,
+			'enum'			=> '',
+			// 'repeat'		=> '',
+			default			=> '',
+		};
+	}
+
 	public static function enterToBr($str)
 	{
 		return str_replace([PHP_EOL, "\n"], '<br>', $str);
