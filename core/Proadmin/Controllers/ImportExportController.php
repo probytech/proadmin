@@ -4,6 +4,7 @@ namespace App\Proadmin\Controllers;
 
 use App\Proadmin\Exports\Export;
 use App\Proadmin\Imports\Import;
+use App\Proadmin\Responses\JsonResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -20,6 +21,6 @@ class ImportExportController extends \App\Http\Controllers\Controller
 
         Excel::import(new Import($table), $file);
 
-        return $this->response();
+        return JsonResponse::response();
     }
 }
