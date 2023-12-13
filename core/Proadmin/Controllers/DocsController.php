@@ -18,7 +18,7 @@ class DocsController extends \App\Http\Controllers\Controller
 		foreach ($menu as $menuItem) {
 
 			$fields = $menuItem->getFields();
-			$relations = $menuItem->getFields();
+			$relations = $menuItem->getRelations();
 
 			$fieldsRequired = $menuItem->getFieldsRequired();
 			
