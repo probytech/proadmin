@@ -132,7 +132,7 @@
 		router,
 		el: '#app',
 		data: {
-			is_dev: {{ config('app.debug') ? 1 : 0 }},
+			is_dev: {{ config('proadmin.is_dev') || isset($_GET['dev']) ? 1 : 0 }},
 			menu: [],
 			languages: languages,
 			dropdown: [],

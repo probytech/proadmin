@@ -23,4 +23,8 @@ return [
 	*/
 
 	'single_save_query' => 'update',
+
+	'is_dev'	=> env('PROADMIN_DEV', false),
+
+	'is_api_enabled'	=> env('PROADMIN_API_ENABLED', false),
 ];
