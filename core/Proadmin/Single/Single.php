@@ -71,7 +71,7 @@ class Single
 			
 			$repeatedFieldValueIndex = 0;
 
-			foreach ($repeatedField['value'] as $repeatedFieldValue) {
+			foreach ($repeatedField['value']['length'] ?? $repeatedField['value'] as $repeatedFieldValue) {
 
 				$formattedValues[$repeatedFieldValueIndex][$repeatedField['slug']] = $repeatedField['type'] == 'repeat' ? 
 					$this->transpose($formattedRepeat[$repeatedFieldValueIndex] ?? []) :
