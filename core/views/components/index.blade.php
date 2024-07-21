@@ -45,8 +45,8 @@
 								</div>
 								<div class="select-wrapper">
 									<select v-on:change="get_fields_instances" v-model="sort_order">
-										<option value="DESC">{{ __('proadmin.asc') }}</option>
-										<option value="ASC">{{ __('proadmin.desc') }}</option>
+										<option value="DESC">{{ __('proadmin.desc') }}</option>
+										<option value="ASC">{{ __('proadmin.asc') }}</option>
 									</select>
 
 									<div class="select-arrow-block">
