@@ -1658,6 +1658,14 @@ select:focus {
     border-bottom-left-radius: 5px;
 }
 
+.td-content-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
 .td-actions {
     padding: 0 !important;
 }

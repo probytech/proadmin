@@ -640,6 +640,13 @@ td.td-content {
     font-size: 0.9722vw;
 }
 
+.td-content-image {
+    width: 6.9444vw;
+    height: 6.9444vw;
+    object-fit: cover;
+    border-radius: 0.3472vw;
+}
+
 .index-pagination {
     display: flex;
     flex-direction: column;
@@ -1831,7 +1838,7 @@ textarea.form-control {
     background: #FFFFFF;
     box-shadow: 0vw 0.9722vw 2.4306vw rgba(0, 1, 20, 0.02);
     border-radius: 1.0417vw;
-    padding: 2.0833vw 2.7778vw;
+    padding: 2.0833vw 1.3889vw;
     margin-bottom: 2.7778vw;
 }
 

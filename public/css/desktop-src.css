@@ -640,6 +640,13 @@ td.td-content {
     font-size: 14px;
 }
 
+.td-content-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
 .index-pagination {
     display: flex;
     flex-direction: column;
@@ -1831,7 +1838,7 @@ textarea.form-control {
     background: #FFFFFF;
     box-shadow: 0px 14px 35px rgba(0, 1, 20, 0.02);
     border-radius: 15px;
-    padding: 30px 40px;
+    padding: 30px 20px;
     margin-bottom: 40px;
 }
 

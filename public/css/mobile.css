@@ -1658,6 +1658,14 @@ select:focus {
     border-bottom-left-radius: 1.5625vw;
 }
 
+.td-content-image {
+    width: 25vw;
+    height: 25vw;
+    object-fit: cover;
+    border-radius: 1.5625vw;
+    flex-shrink: 0;
+}
+
 .td-actions {
     padding: 0 !important;
 }
