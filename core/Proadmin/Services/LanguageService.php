@@ -32,7 +32,7 @@ class LanguageService
 
 		if ($url == '') {
 
-			$url = url()->current();
+			$url = url()->full();
 		}
 
 		foreach ($this->langs as $l) {
