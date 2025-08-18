@@ -48,47 +48,12 @@ composer require probytech/proadmin
 php artisan proadmin:install
 ```
 
-- Publish config and assets for file manager
-```bash
-php artisan vendor:publish --tag=lfm_config 
-php artisan vendor:publish --tag=lfm_public
-```
-
-- Run commands to clear cache
-```bash
-php artisan route:clear
-php artisan config:clear
-```
-
-- In "config/lfm.php"
-```bash
-
-//add category of folder
-in folder_categories (48 line)
-
-'admin' => [
-    'folder_name'  => 'vendor/proadmin/icons',
-    'startup_view' => 'list',
-    'max_size'     => 50000, // size in KB
-    'valid_mime'   => [
-        'image/jpeg',
-        'image/pjpeg',
-        'image/png',
-        'image/gif',
-        'image/svg+xml',
-        'application/pdf',
-        'text/plain',
-    ],
-],
-```
-
-
 Enjoy 🎉
 
 # Concept
 
 - You can generate CRUDs with this package. The package also automatically creates model files with relations and migrations (they are also added when updating or deleting CRUDs).
-- Data about dropdown list and CRUDs (menu) are stored in table `menu`.
+- Data about CRUDs collections are stored in storage/collections.json.
 - You have the ability to create “single” entities to manage static content.
 - The admin panel is fully multi-lingual. CRUD multilingualism is represented as identical tables in different languages, e.g. post_en, post_de. This approach [denormalizes](https://en.wikipedia.org/wiki/Denormalization) the database (increasing the amount of space occupied), but makes a very simple approach to manage it. The multilanguage model is very simple and is represented by the MultilanguageModel class. 
 - Additionaly you can use Translatable trait to translate your content. So you can create non multilanguage instance with common fields like title_en, title_de and than add it in your model to protected array $translatable = ['title'].
@@ -98,9 +63,9 @@ Enjoy 🎉
 
 - Go to https://yourdomain.com/admin/menu
 - Fill the fields:
-  - **CRUD name** - the table name for the DB
-  - **CRUD title** - the title for the menu
-  - **Is dev** - the option to hide CRUD from menu (see more [Open dev menu](#open-dev-menu))
+  - **CRUD name** - the table name for the collection
+  - **CRUD title** - the title for the collection
+  - **Is dev** - the option to hide CRUD from admin panel (see more [Open dev menu](#open-dev-menu))
   - **Multilanguage** - the option to enable multilanguage (see more [Multilanguage](multilanguage))
   - **Sort** - sort order in the menu
   - **Dropdown** - set parent menu item (see more [Dropdown menu](dropdown-menu))
@@ -110,9 +75,9 @@ Enjoy 🎉
 - Now you can create Controller and use generated Model in it. Or you can go to /api/{crud_slug}
 
 Notes:
-- All the data about CRUDs is stored in `menu` table 
-- If you want to move the generated model from the default folder - you need to edit the **Model field** in the model in `menu` table properly.
-- If you **DON'T** want to edit the model automatically when you change the CRUD - you just need to remove the **Model field** in the `menu` table (but this will break /api/{model}/{id}).
+- All the data about CRUDs is stored in storage/collections.json
+- If you want to move the generated model from the default folder - you need to edit the **Model field** in storage/collection.json.
+- If you **DON'T** want to edit the model automatically when you change the CRUD - you just need to make the **Model field** in the storage/collections.json empty. (but this will break /api/{model}/{id}).
 
 You can see the examples below:
 
