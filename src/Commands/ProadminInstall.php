@@ -104,7 +104,7 @@ class ProadminInstall extends Command {
 
 		$this->publish_parts_folder(
 			$this->path_package('/public/icons'),
-			storage_path('/public/vendor/proadmin/icons')
+			storage_path('/app/public/vendor/proadmin/icons')
 		);
 
 		copy(
