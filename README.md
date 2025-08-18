@@ -48,12 +48,7 @@ composer require probytech/proadmin
 php artisan proadmin:install
 ```
 
-- Install laravel image package
-```bash
-composer require intervention/image-laravel
-```
-
-- Publish the packages config and assets
+- Publish config and assets for file manager
 ```bash
 php artisan vendor:publish --tag=lfm_config 
 php artisan vendor:publish --tag=lfm_public
@@ -67,10 +62,6 @@ php artisan config:clear
 
 - In "config/lfm.php"
 ```bash
-// in any place
-add line: 'middlewares' => ['admin'],
-
-change line: ('disk' => 'public',) to ('disk' => 'lfm',)
 
 //add category of folder
 in folder_categories (48 line)
@@ -88,17 +79,6 @@ in folder_categories (48 line)
         'application/pdf',
         'text/plain',
     ],
-],
-```
-
-- Add disk "config/filesystems.php"
-```bash
-// add like line 44 from:
-'lfm' => [
-    'driver' => 'local',
-    'root' => public_path(),
-    'url' => env('APP_URL'),
-    'visibility' => 'public',
 ],
 ```
 

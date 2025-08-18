@@ -4,7 +4,8 @@ namespace Probytech\Proadmin\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Artisan;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Artisan;
 
 class ProadminInstall extends Command {
 
@@ -25,31 +26,37 @@ class ProadminInstall extends Command {
 	/**
 	 * Create a new command instance.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
 	/**
 	 * Execute the console command.
 	 */
-	public function handle() {
-
+	public function handle()
+	{
 		$this->info('Please note: Proadmin requires fresh Laravel installation!');
-		$this->publish_parts();
+		$this->publishParts();
 		
 		Artisan::call('migrate');
 		$this->info('Migrated successfully!');
 		
-		$this->add_user();
+		$this->addUser();
+
+		$this->publishLfm();
+
+		Artisan::call('route:clear');
+		Artisan::call('config:clear');
 	}
 
-	private function path_package ($path) {
-
+	private function pathPackage ($path) 
+	{
 		return base_path("/vendor/probytech/proadmin" . $path);
 	}
 
-	private function publish_parts_folder ($source, $destination) {
-
+	private function publishPartsFolder ($source, $destination)
+	{
 		if (!is_dir($destination)) {
 			mkdir($destination, 0777, true);
 		}
@@ -63,7 +70,7 @@ class ProadminInstall extends Command {
 
 			if (is_dir($source . '/' . $file)) {
 
-				$this->publish_parts_folder($source . '/' . $file, $destination . '/' . $file);
+				$this->publishPartsFolder($source . '/' . $file, $destination . '/' . $file);
 
 			} else {
 
@@ -75,73 +82,83 @@ class ProadminInstall extends Command {
 		}
 	}
 
-	private function publish_parts () {
-
-		$this->publish_parts_folder(
-			$this->path_package('/src/Proadmin'),
+	private function publishParts ()
+	{
+		$this->publishPartsFolder(
+			$this->pathPackage('/src/Proadmin'),
 			base_path('/app/Proadmin')
 		);
 
-		$this->publish_parts_folder(
-			$this->path_package('/resources/views'),
+		$this->publishPartsFolder(
+			$this->pathPackage('/resources/views'),
 			base_path('/resources/views/proadmin')
 		);
 
-		$this->publish_parts_folder(
-			$this->path_package('/migrations'),
+		$this->publishPartsFolder(
+			$this->pathPackage('/migrations'),
 			base_path('/database/migrations')
 		);
 
-		$this->publish_parts_folder(
-			$this->path_package('/lang'),
+		$this->publishPartsFolder(
+			$this->pathPackage('/lang'),
 			base_path('/lang')
 		);
 
-		$this->publish_parts_folder(
-			$this->path_package('/public'),
+		$this->publishPartsFolder(
+			$this->pathPackage('/public'),
 			public_path('/vendor/proadmin')
 		);
 
-		$this->publish_parts_folder(
-			$this->path_package('/public/icons'),
+		$this->publishPartsFolder(
+			$this->pathPackage('/public/icons'),
 			storage_path('/app/public/vendor/proadmin/icons')
 		);
 
 		copy(
-			$this->path_package('/routes/web.php'),
+			$this->pathPackage('/routes/web.php'),
 			base_path('/routes/proadmin.php')
 		);
 
 		copy(
-			$this->path_package('/routes/api.php'),
+			$this->pathPackage('/routes/api.php'),
 			base_path('/routes/proadmin_api.php')
 		);
 
 		copy(
-			$this->path_package('/config/proadmin.php'),
+			$this->pathPackage('/config/proadmin.php'),
 			base_path('/config/proadmin.php')
 		);
 
 		copy(
-			$this->path_package('/bootstrap/providers.php'),
+			$this->pathPackage('/bootstrap/providers.php'),
 			base_path('/bootstrap/providers.php')
 		);
 
 		copy(
-			$this->path_package('/storage/collections.json'),
+			$this->pathPackage('/storage/collections.json'),
 			storage_path('/collections.json')
 		);
 
 		$this->info('Published successfully!');
 	}
 
-	private function add_user() {
-
+	private function addUser()
+	{
 		User::create([
 			'name'		=> $this->ask('Administrator name'),
 			'email'		=> $this->ask('Administrator email'),
-			'password'	=> bcrypt($this->secret('Administrator password')),
+			'password'	=> Hash::make($this->secret('Administrator password')),
 			'roles_id'	=> 1,
 		]);
+	}
+
+	private function publishLfm ()
+	{
+		Artisan::call('vendor:publish', ['--tag' => 'lfm_public']);
+
+		copy(
+			$this->pathPackage('/config/lfm.php'),
+			base_path('/config/lfm.php')
+		);
 	}
 }
