@@ -27,8 +27,13 @@ class ProadminServiceProvider extends ServiceProvider
 			]);
 		}
 
+		$this->publishes([
+			__DIR__.'/../routes/api.php' => base_path('routes/proadmin_api.php'),
+			__DIR__.'/../routes/web.php' => base_path('routes/proadmin.php'),
+		]);
+
 		Route::middleware('web')
-			->group(base_path('routes/proadmin.php'));
+		->group(base_path('routes/proadmin.php'));
 
 		Route::middleware('api')
 		->prefix('api')

@@ -108,16 +108,6 @@ class ProadminInstall extends Command {
 		);
 
 		copy(
-			$this->path_package('/routes/web.php'),
-			base_path('/routes/proadmin.php')
-		);
-
-		copy(
-			$this->path_package('/routes/api.php'),
-			base_path('/routes/proadmin_api.php')
-		);
-
-		copy(
 			$this->path_package('/config/proadmin.php'),
 			base_path('/config/proadmin.php')
 		);
