@@ -61,19 +61,19 @@ class AdminController extends \App\Http\Controllers\Controller
 
 		if (Auth::attempt(['email' => $email, 'password' => $password], $request->get('remember') === 'true')) {
 
-			return redirect('/proadmin');
+			return redirect('/admin');
 		}
 
 		setcookie('password', 'incorrect', time() + 3600 * 5);
 
-		return redirect('/proadmin/login');
+		return redirect('/admin/login');
 	}
 
 	public function logout()
 	{
 		Auth::logout();
 
-		return redirect('/proadmin/login');
+		return redirect('/admin/login');
 	}
 
 	public function updateDropdown()
