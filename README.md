@@ -48,9 +48,9 @@ composer require probytech/proadmin
 php artisan proadmin:install
 ```
 
-- Add class aliases in bottom of file config/app.php
+- Install laravel image package
 ```bash
-'Image' => Intervention\Image\Facades\Image::class,
+composer require intervention/image-laravel
 ```
 
 - Publish the packages config and assets
