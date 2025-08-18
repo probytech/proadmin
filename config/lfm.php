@@ -60,6 +60,14 @@ return [
                 'image/gif',
                 'application/pdf',
                 'text/plain',
+                'video/mp4',
+                'video/quicktime',
+                'video/x-msvideo',
+                'image/svg+xml',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'text/csv',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             ],
         ],
         'image' => [
@@ -74,6 +82,8 @@ return [
                 'image/pjpeg',
                 'image/png',
                 'image/gif',
+                'image/svg+xml',
+                'image/webp',
             ],
         ],
         'admin' => [
@@ -81,13 +91,7 @@ return [
             'startup_view' => 'list',
             'max_size'     => 50000, // size in KB
             'valid_mime'   => [
-                'image/jpeg',
-                'image/pjpeg',
-                'image/png',
-                'image/gif',
                 'image/svg+xml',
-                'application/pdf',
-                'text/plain',
             ],
         ],
     ],
