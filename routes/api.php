@@ -2,7 +2,7 @@
 
 use App\Proadmin\Controllers\ApiController;
 use App\Proadmin\Controllers\SingleController;
-use App\Proadmin\Models\Menu;
+use App\Proadmin\Facades\Collection;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,40 +18,45 @@ use Illuminate\Support\Facades\Route;
 
 if (config('proadmin.is_api_enabled')) {
     
-    $menu = Menu::get();
+    Route::group([
+        'prefix' => 'api',
+    ], function () {
 
-    foreach ($menu as $menuItem) {
+        $collections = Collection::get();
+
+        foreach ($collections as $collection) {
+
+            Route::group([
+                'prefix' => Lang::prefix(),
+            ], function () use ($collection) {
+
+                Route::get($collection->table_name, [ApiController::class, 'index'])
+                    ->defaults('menu_item', $collection)
+                    ->name('api-index-' . $collection->table_name);
+
+                Route::get($collection->table_name . '/{id}', [ApiController::class, 'show'])
+                    ->defaults('menu_item', $collection)
+                    ->name('api-show-' . $collection->table_name);
+            });
+
+            Route::post($collection->table_name, [ApiController::class, 'store'])
+                ->defaults('menu_item', $collection)
+                ->name('api-store-' . $collection->table_name);
+
+            Route::put($collection->table_name . '/{id}', [ApiController::class, 'update'])
+                ->defaults('menu_item', $collection)
+                ->name('api-update-' . $collection->table_name);
+
+            Route::delete($collection->table_name . '/{id}', [ApiController::class, 'destroy'])
+                ->defaults('menu_item', $collection)
+                ->name('api-destroy-' . $collection->table_name);
+        }
 
         Route::group([
             'prefix' => Lang::prefix(),
-        ], function () use ($menuItem) {
+        ], function () {
 
-            Route::get($menuItem->table_name, [ApiController::class, 'index'])
-                ->defaults('menu_item', $menuItem)
-                ->name('api-index-' . $menuItem->table_name);
-
-            Route::get($menuItem->table_name . '/{id}', [ApiController::class, 'show'])
-                ->defaults('menu_item', $menuItem)
-                ->name('api-show-' . $menuItem->table_name);
+            Route::get('/single/{slug}', [SingleController::class, 'first']);
         });
-
-        Route::post($menuItem->table_name, [ApiController::class, 'store'])
-            ->defaults('menu_item', $menuItem)
-            ->name('api-store-' . $menuItem->table_name);
-
-        Route::put($menuItem->table_name . '/{id}', [ApiController::class, 'update'])
-            ->defaults('menu_item', $menuItem)
-            ->name('api-update-' . $menuItem->table_name);
-
-        Route::delete($menuItem->table_name . '/{id}', [ApiController::class, 'destroy'])
-            ->defaults('menu_item', $menuItem)
-            ->name('api-destroy-' . $menuItem->table_name);
-    }
-
-    Route::group([
-        'prefix' => Lang::prefix(),
-    ], function () {
-
-        Route::get('/single/{slug}', [SingleController::class, 'first']);
     });
 }
