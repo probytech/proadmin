@@ -1,0 +1,83 @@
+[
+    {
+        "id": 1,
+        "title": "Roles",
+        "table_name": "roles",
+        "fields": [
+            {
+                "id": 0,
+                "required": "optional",
+                "is_visible": true,
+                "show_in_list": "yes",
+                "type": "text",
+                "db_title": "title",
+                "title": "Title"
+            }
+        ],
+        "is_dev": 1,
+        "multilanguage": 0,
+        "is_soft_delete": 0,
+        "sort": 0,
+        "dropdown_id": 0,
+        "icon": "",
+        "model": "",
+        "type": "multiple"
+    },
+    {
+        "id": 2,
+        "title": "Users",
+        "table_name": "users",
+        "fields": [
+            {
+                "id": 0,
+                "lang": 0,
+                "required": "optional",
+                "is_visible": true,
+                "show_in_list": "yes",
+                "type": "text",
+                "db_title": "name",
+                "title": "Name"
+            },
+            {
+                "id": 1,
+                "required": "optional",
+                "is_visible": true,
+                "lang": 1,
+                "show_in_list": "no",
+                "type": "relationship",
+                "relationship_count": "single",
+                "relationship_table_name": "roles",
+                "title": "Role",
+                "relationship_view_field": "title"
+            },
+            {
+                "id": 2,
+                "lang": 0,
+                "required": "optional",
+                "is_visible": true,
+                "show_in_list": "yes",
+                "type": "text",
+                "db_title": "email",
+                "title": "Email"
+            },
+            {
+                "id": 3,
+                "lang": 0,
+                "required": "optional",
+                "is_visible": true,
+                "show_in_list": "no",
+                "type": "password",
+                "db_title": "password",
+                "title": "Password"
+            }
+        ],
+        "is_dev": 0,
+        "multilanguage": 0,
+        "is_soft_delete": 0,
+        "sort": 1,
+        "dropdown_id": 0,
+        "icon": "\/vendor\/proadmin\/icons\/1\/15.svg",
+        "model": "",
+        "type": "multiple"
+    }
+]

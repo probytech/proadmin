@@ -4,8 +4,6 @@ namespace Probytech\Proadmin\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Probytech\Proadmin\Templates\TemplateComponents;
-use Probytech\Proadmin\Templates\TemplateDefault;
 use Artisan;
 
 class ProadminInstall extends Command {
@@ -43,14 +41,6 @@ class ProadminInstall extends Command {
 		$this->info('Migrated successfully!');
 		
 		$this->add_user();
-		$type_template = $this->import_template();
-	}
-
-	private function template_add_folder ($path) {
-
-		if (!is_dir($path)) {
-			mkdir($path, 0777, true);
-		}
 	}
 
 	private function path_package ($path) {
@@ -60,7 +50,9 @@ class ProadminInstall extends Command {
 
 	private function publish_parts_folder ($source, $destination) {
 
-		$this->template_add_folder($destination);
+		if (!is_dir($destination)) {
+			mkdir($destination, 0777, true);
+		}
 
 		$files = scandir($source);
 
@@ -86,22 +78,22 @@ class ProadminInstall extends Command {
 	private function publish_parts () {
 
 		$this->publish_parts_folder(
-			$this->path_package('/core/Proadmin'),
+			$this->path_package('/src/Proadmin'),
 			base_path('/app/Proadmin')
 		);
 
 		$this->publish_parts_folder(
-			$this->path_package('/core/views'),
+			$this->path_package('/resources/views'),
 			base_path('/resources/views/proadmin')
 		);
 
 		$this->publish_parts_folder(
-			$this->path_package('/core/migrations'),
+			$this->path_package('/migrations'),
 			base_path('/database/migrations')
 		);
 
 		$this->publish_parts_folder(
-			$this->path_package('/core/lang'),
+			$this->path_package('/lang'),
 			base_path('/lang')
 		);
 
@@ -110,19 +102,29 @@ class ProadminInstall extends Command {
 			public_path('/vendor/proadmin')
 		);
 
+		$this->publish_parts_folder(
+			$this->path_package('/public/icons'),
+			storage_path('/public/vendor/proadmin/icons')
+		);
+
 		copy(
-			$this->path_package('/core/routes.php'),
+			$this->path_package('/routes/web.php'),
 			base_path('/routes/proadmin.php')
 		);
 
 		copy(
-			$this->path_package('/core/api_routes.php'),
+			$this->path_package('/routes/api.php'),
 			base_path('/routes/proadmin_api.php')
 		);
 
 		copy(
-			$this->path_package('/core/proadmin.php'),
+			$this->path_package('/config/proadmin.php'),
 			base_path('/config/proadmin.php')
+		);
+
+		copy(
+			$this->path_package('/storage/collections.json'),
+			storage_path('/collections.json')
 		);
 
 		// register provider
@@ -138,32 +140,6 @@ class ProadminInstall extends Command {
 				substr_replace($provider, '*/ App\Proadmin\Providers\ProadminServiceProvider::class,', $pos, 2)
 			);
 		}
-	}
-
-	private function import_template () {
-
-		$answer = $this->ask('Import template (only on fresh installation): converter, layout, header, footer, pagination, JS, route, SitemapController, PagesController (Y/n)?');
-
-		$type = '';
-
-		if ($answer != 'n') {
-
-			$type = $this->choice('Which type of template do you want?', [
-				'Default',
-				'With Components',
-			]);
-
-			if ($type == 'Default'){
-				$template = new TemplateDefault();
-			} else {
-				$template = new TemplateComponents();
-			}
-
-			$template->import();
-			
-		}
-
-		return $type;
 	}
 
 	private function add_user() {
