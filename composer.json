@@ -6,12 +6,12 @@
     "authors": [{
         "name": "Probotiuk Anatoliy",
         "email": "anatoliy.probotiuk@gmail.com",
-        "homepage": "https://probotiuk.com",
+        "homepage": "https://probytech.com.ua",
         "role": "CEO"
     }],
     "require": {
-        "unisharp/laravel-filemanager": "2.6.0",
-        "mobiledetect/mobiledetectlib": "^3.74",
+        "unisharp/laravel-filemanager": "2.10.0",
+        "mobiledetect/mobiledetectlib": "4.8.06",
         "maatwebsite/excel": "^3.1"
     },
     "autoload": {

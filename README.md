@@ -30,7 +30,7 @@ Install Laravel first
 
 
 ```bash
-composer create-project laravel/laravel="9.*" PROJECT_NAME
+composer create-project laravel/laravel="12.*" PROJECT_NAME
 cd PROJECT_NAME
 ```
 
