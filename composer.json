@@ -24,7 +24,15 @@
             "providers": [
                 "Probytech\\Proadmin\\ProadminServiceProvider"
             ],
-            "aliases": {}
+            "aliases": {
+                "Collection": "Probytech\\Proadmin\\Facades\\Collection",
+                "Single": "Probytech\\Proadmin\\Facades\\Single",
+                "Lang": "Probytech\\Proadmin\\Facades\\Lang",
+                "SEO": "Probytech\\Proadmin\\Facades\\SEO",
+                "Field": "Probytech\\Proadmin\\Facades\\Field",
+                "ResizeImg": "Probytech\\Proadmin\\Facades\\ResizeImg",
+                "Platform": "Probytech\\Proadmin\\Facades\\Platform"
+            }
         }
     }
 }

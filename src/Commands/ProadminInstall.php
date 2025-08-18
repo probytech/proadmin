@@ -127,19 +127,7 @@ class ProadminInstall extends Command {
 			storage_path('/collections.json')
 		);
 
-		// register provider
-		$provider = file_get_contents(base_path("/config/app.php"));
-		
-		if (strpos($provider, 'ProadminServiceProvider::class') === false) {
-
-			$pos = strpos($provider, 'Package Service Providers...');
-			$pos = strpos($provider, '*/', $pos);
-			
-			file_put_contents(
-				base_path("/config/app.php"),
-				substr_replace($provider, '*/ App\Proadmin\Providers\ProadminServiceProvider::class,', $pos, 2)
-			);
-		}
+		$this->info('Published successfully!');
 	}
 
 	private function add_user() {
