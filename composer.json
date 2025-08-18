@@ -10,7 +10,7 @@
         "role": "CEO"
     }],
     "require": {
-        "unisharp/laravel-filemanager": "2.10.0",
+        "unisharp/laravel-filemanager": "2.11.0",
         "intervention/image-laravel": "^1.5",
         "mobiledetect/mobiledetectlib": "4.8.06",
         "maatwebsite/excel": "^3.1"
