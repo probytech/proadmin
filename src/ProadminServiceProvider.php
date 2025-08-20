@@ -31,9 +31,11 @@ class ProadminServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'proadmin');
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
         $this->loadJsonTranslationsFrom(__DIR__.'/../lang');
+
+        $this->publishesMigrations([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'proadmin-migrations');
 
         $this->publishes([
             __DIR__.'/../config/lfm.php' => base_path('config/lfm.php'),
