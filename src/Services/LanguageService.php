@@ -7,6 +7,7 @@ use Probytech\Proadmin\Services\ProadminService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Schema;
 
 class LanguageService
 {
@@ -18,7 +19,15 @@ class LanguageService
 
 	public function __construct(Request $request, ProadminService $fastAdminPanelService)
 	{
-		$this->langs = Language::get();
+        if (Schema::hasTable('languages')) {
+            $this->langs = Language::get();
+        } else {
+            // During installation, table doesn't exist yet - default fallback
+            $this->langs = collect([
+                (object) ['tag' => 'en', 'main_lang' => 1]
+            ]);
+        }
+
 		$this->host = $request->getHost();
 		$this->lang = $this->findLang($request, $this->langs);
 
@@ -113,15 +122,18 @@ class LanguageService
 			return $this->langs->firstWhere('main_lang', 1)->tag ?? '';
 		}
 
-		Language::where('main_lang', 1)
-		->update([
-			'main_lang'	=> 0,
-		]);
+        // Only update database if table exists
+        if (Schema::hasTable('languages')) {
+            Language::where('main_lang', 1)
+            ->update([
+                'main_lang'	=> 0,
+            ]);
 
-		Language::where('tag', $to)
-		->update([
-			'main_lang'	=> 1,
-		]);
+            Language::where('tag', $to)
+            ->update([
+                'main_lang'	=> 1,
+            ]);
+        }
 	}
 
 	public function getMain()
