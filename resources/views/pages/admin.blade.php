@@ -1,26 +1,25 @@
-@extends('proadmin.layouts.app')
+@extends('proadmin::layouts.app')
 
 @section('content')
 
-@if(Platform::mobile())
-	<div class="topbar">
-		<div class="toggle" :class="{ active: show_mobile_menu }" @click="show_mobile_menu = !show_mobile_menu">
-			<div class="toggle-item"></div>
-			<div class="toggle-item"></div>
-			<div class="toggle-item"></div>
-		</div>
-		<div class="sidebar-header">
-			<a href="/" target="_blank">
-				<img src="/vendor/proadmin/images/logo.svg" alt="" class="sidebar-logo">
-			</a>
-            <router-link to="/admin" class="sidebar-header-title">{{ __('proadmin.admin_panel') }}</router-link>
-		</div>
-	</div>
-@endif
+<div class="lg:!hidden flex items-center justify-between bg-white py-2 px-4">
+    <div class="flex flex-col items-center justify-center w-10 h-10 bg-primary rounded-full" :class="{ active: show_mobile_menu }" @click="show_mobile_menu = !show_mobile_menu">
+        <div class="w-4 h-[2px] bg-white rounded-full duration-300" :class="{'-mb-[1px] rotate-45': show_mobile_menu}"></div>
+        <div class="w-3 h-[2px] bg-white rounded-full my-1 duration-300" :class="{ 'hidden': show_mobile_menu }"></div>
+        <div class="w-4 h-[2px] bg-white rounded-full duration-300" :class="{'-mt-[1px] -rotate-45': show_mobile_menu}"></div>
+    </div>
+    <div class="flex items-center gap-2">
+        <a href="/" target="_blank">
+            <img src="/vendor/proadmin/images/logo.svg" alt="" class="w-16">
+        </a>
+        <router-link to="/admin" class="text-base font-bold bg-background rounded-lg px-4 py-2">{{ __('Admin panel') }}</router-link>
+    </div>
 
-<main>
-	<template-sidebar :class="{ active: show_mobile_menu }" :is_dev="is_dev" :menu="menu" :dropdown="dropdown"></template-sidebar>
-	<div class="content">
+</div>
+
+<main class="min-h-screen flex">
+	<template-sidebar :class="{ active: show_mobile_menu }" :show_mobile_menu="show_mobile_menu" :is_dev="is_dev" :menu="menu" :dropdown="dropdown"></template-sidebar>
+	<div class="flex-1 py-7 px-5 md:px-12">
 		<router-view></router-view>
 	</div>
 </main>
@@ -36,35 +35,34 @@
 	@include($custom_component['path'])
 @endforeach
 
-@include('proadmin.mixins.recursive-field')
-@include('proadmin.components.dropdown')
-@include('proadmin.components.fields.repeat')
-@include('proadmin.components.fields.checkbox')
-@include('proadmin.components.fields.ckeditor')
-@include('proadmin.components.fields.color')
-@include('proadmin.components.fields.date')
-@include('proadmin.components.fields.datetime')
-@include('proadmin.components.fields.enum')
-@include('proadmin.components.fields.file')
-@include('proadmin.components.fields.gallery')
-@include('proadmin.components.fields.money')
-@include('proadmin.components.fields.number')
-@include('proadmin.components.fields.password')
-@include('proadmin.components.fields.photo')
-@include('proadmin.components.fields.relationship')
-@include('proadmin.components.fields.text')
-@include('proadmin.components.fields.textarea')
-@include('proadmin.components.single')
-@include('proadmin.components.singlefields')
-@include('proadmin.components.singlepage')
-@include('proadmin.components.settings')
-@include('proadmin.components.docs')
-@include('proadmin.components.sidebar')
-@include('proadmin.components.menu')
-@include('proadmin.components.edit')
-@include('proadmin.components.main')
-@include('proadmin.components.index')
-@include('proadmin.components.import')
+@include('proadmin::mixins.recursive-field')
+@include('proadmin::components.dropdown')
+@include('proadmin::components.fields.repeat')
+@include('proadmin::components.fields.checkbox')
+@include('proadmin::components.fields.ckeditor')
+@include('proadmin::components.fields.color')
+@include('proadmin::components.fields.date')
+@include('proadmin::components.fields.datetime')
+@include('proadmin::components.fields.enum')
+@include('proadmin::components.fields.file')
+@include('proadmin::components.fields.gallery')
+@include('proadmin::components.fields.money')
+@include('proadmin::components.fields.number')
+@include('proadmin::components.fields.password')
+@include('proadmin::components.fields.photo')
+@include('proadmin::components.fields.relationship')
+@include('proadmin::components.fields.text')
+@include('proadmin::components.fields.textarea')
+@include('proadmin::components.single')
+@include('proadmin::components.singlefields')
+@include('proadmin::components.singlepage')
+@include('proadmin::components.settings')
+@include('proadmin::components.docs')
+@include('proadmin::components.sidebar')
+@include('proadmin::components.collections')
+@include('proadmin::components.edit')
+@include('proadmin::components.index')
+@include('proadmin::components.import')
 
 <script>
 
@@ -83,9 +81,9 @@
 				name: 'dropdown',
 				component: Vue.options.components['template-dropdown'],
 			}, {
-				path: '/admin/menu',
-				name: 'menu',
-				component: Vue.options.components['template-menu'],
+				path: '/admin/collections',
+				name: 'collections',
+				component: Vue.options.components['template-collections'],
 			}, {
 				path: '/admin/single',
 				name: 'single',
@@ -125,7 +123,7 @@
 			},
 		],
 	})
-	
+
 	Vue.component("v-select", VueSelect.VueSelect);
 
 	var app = new Vue({
@@ -186,9 +184,9 @@
 					} else this.languages[i].is_active = false
 				}
 			}
-			
+
 			request('/admin/get-menu', {}, (data)=>{
-				
+
 				this.menu = data.menu
 				this.dropdown = data.dropdown
 
@@ -198,22 +196,6 @@
 		mounted: function(){
 
 		},
-	})
-</script>
-
-<script>
-	
-	$('.sidebar').on('click', function(e) {
-        if (this == (e.target)) {
-            $(this).removeClass('active')
-            $('.toggle').removeClass('active')
-        }
-    })
-	$('.sidebar').on('click', function(e){
-		if(e.target.tagName == 'A'){
-			$(this).removeClass('active')
-			$('.toggle').removeClass('active')
-		}
 	})
 </script>
 

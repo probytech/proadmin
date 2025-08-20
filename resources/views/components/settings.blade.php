@@ -1,7 +1,7 @@
 <template id="template-settings">
-	<div class="settings">
-		<div class="btn btn-primary" v-on:click="rm_language">{{__('proadmin.delete_lang')}}</div>
-		<div class="btn btn-primary" v-on:click="add_language">{{__('proadmin.add_lang')}}</div>
+	<div class="flex items-center gap-5">
+		<div class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg cursor-pointer hover:bg-hover duration-300" v-on:click="addLanguage">{{__('Add language')}}</div>
+		<div class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg cursor-pointer hover:bg-hover duration-300" v-on:click="removeLanguage">{{__('Delete language')}}</div>
 	</div>
 </template>
 
@@ -10,31 +10,29 @@
 		template: '#template-settings',
 		props: [],
 		data() {
-			return {
-
-			}
+			return {}
 		},
 		methods: {
-			async rm_language() {
+			async removeLanguage() {
 
-				const lang_tag = prompt('Enter language', '')
-				
-				if (lang_tag) {
+				const tag = prompt('Enter language', '')
 
-					const response = await req.delete('/admin/api/language/' + lang_tag, {
+				if (tag) {
+
+					const response = await req.delete('/admin/api/language/' + tag, {
 						blocks: this.blocks,
 					})
 
 					document.location.reload()
 				}
 			},
-			async add_language() {
+			async addLanguage() {
 
-				const lang_tag = prompt('Enter language', '')
-				
-				if (lang_tag) {
+				const tag = prompt('Enter language', '')
 
-					const response = await req.post('/admin/api/language/' + lang_tag, {
+				if (tag) {
+
+					const response = await req.post('/admin/api/language/' + tag, {
 						blocks: this.blocks,
 					})
 

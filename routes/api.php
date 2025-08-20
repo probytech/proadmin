@@ -1,26 +1,27 @@
 <?php
 
-use App\Proadmin\Controllers\ApiController;
-use App\Proadmin\Controllers\SingleController;
-use App\Proadmin\Facades\Collection;
+use Probytech\Proadmin\Controllers\ApiController;
+use Probytech\Proadmin\Controllers\SingleController;
+use Probytech\Proadmin\Facades\Collection;
 use Illuminate\Support\Facades\Route;
+use Probytech\Proadmin\Facades\Lang;
 
 /*
 |--------------------------------------------------------------------------
 | Proadmin API Routes
 |--------------------------------------------------------------------------
 |
-| Here is generated API routes for your proadmin application. These routes 
+| Here is generated API routes for your proadmin application. These routes
 | were generated automatically using the data you entered in the admin panel.
 | Enjoy building your API!
 |
 */
 
 if (config('proadmin.is_api_enabled')) {
-    
-    Route::group([
-        'prefix' => 'api',
-    ], function () {
+
+    Route::middleware('api')
+    ->prefix('api')
+    ->group(function () {
 
         $collections = Collection::get();
 

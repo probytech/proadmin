@@ -33,7 +33,7 @@ return [
     // Then you can rewrite userField function in App\Handler\ConfigHandler class
     // And set 'user_field' to App\Handler\ConfigHandler::class
     // Ex: The private folder of user will be named as the user id.
-    'private_folder_name'      => App\Proadmin\Handlers\LfmConfigHandler::class,
+    'private_folder_name'      => Probytech\Proadmin\Handlers\LfmConfigHandler::class,
 
     'allow_shared_folder'      => false,
 

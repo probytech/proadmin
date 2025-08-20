@@ -1,18 +1,18 @@
 <script type="text/x-template" id="template-field-text">
-	<div class="form-group">
-		
-		<div class="field-title">
-			<label class="edit-field-title control-label" v-text="field.title"></label>
-			
-			<div class="field-remark" v-if="field.remark">
+	<div class="w-full">
+
+		<div class="flex items-center gap-2 mb-1">
+			<label class="text-base font-bold" v-text="field.title"></label>
+
+			<div class="text-sm text-grey" v-if="field.remark">
 				i
-				<div class="field-remark-modal" v-text="field.remark"></div>
+				<div class="text-base" v-text="field.remark"></div>
 			</div>
 		</div>
 
-		<div class="edit-field-inner">
-			<input class="form-control" type="text" v-model="value" v-on:change="error = ''" v-on:input="change" maxlength="191">
-			<div class="input-error" v-text="error"></div>
+		<div class="w-full">
+			<input class="w-full text-base px-4 py-2 appearance-none border border-stroke rounded-sm ring-0 focus:ring-0 outline-0 focus:outline-none" type="text" v-model="value" v-on:change="error = ''" v-on:input="change" maxlength="191">
+			<div class="text-red-600 text-sm" v-text="error"></div>
 		</div>
 	</div>
 </script>
@@ -33,13 +33,13 @@
 				const val = this.value
 
 				if (this.field.required != 'optional' && !val) {
-					this.error = 'This field is required'
+					this.error = '{{ __('This field is required') }}'
 				} else if (this.field.required == 'required_once') {
 					// TODO
 				}
-									
+
 				if (val.length > 191)
-					this.error = 'More than maxlength (191 symbols)'
+					this.error = '{{ __('More than maxlength (191 symbols)') }}'
 
 				if (this.error == '')
 					return true
@@ -55,7 +55,7 @@
 			slugify(s, opt) {
 				s = String(s);
 				opt = Object(opt);
-				
+
 				var defaults = {
 					'delimiter': '-',
 					'limit': undefined,
@@ -63,25 +63,25 @@
 					'replacements': {},
 					'transliterate': (typeof(XRegExp) === 'undefined') ? true : false
 				};
-				
+
 				// Merge options
 				for (var k in defaults) {
 					if (!opt.hasOwnProperty(k)) {
 						opt[k] = defaults[k];
 					}
 				}
-				
+
 				var char_map = {
 					// Latin
-					'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'AE', 'Ç': 'C', 
-					'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 
-					'Ð': 'D', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ő': 'O', 
-					'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ű': 'U', 'Ý': 'Y', 'Þ': 'TH', 
-					'ß': 'ss', 
-					'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'ae', 'ç': 'c', 
-					'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 
-					'ð': 'd', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ő': 'o', 
-					'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u', 'ű': 'u', 'ý': 'y', 'þ': 'th', 
+					'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'AE', 'Ç': 'C',
+					'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I',
+					'Ð': 'D', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ő': 'O',
+					'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ű': 'U', 'Ý': 'Y', 'Þ': 'TH',
+					'ß': 'ss',
+					'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'ae', 'ç': 'c',
+					'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i',
+					'ð': 'd', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ő': 'o',
+					'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u', 'ű': 'u', 'ý': 'y', 'þ': 'th',
 					'ÿ': 'y',
 
 					// Latin symbols
@@ -101,7 +101,7 @@
 
 					// Turkish
 					'Ş': 'S', 'İ': 'I', 'Ç': 'C', 'Ü': 'U', 'Ö': 'O', 'Ğ': 'G',
-					'ş': 's', 'ı': 'i', 'ç': 'c', 'ü': 'u', 'ö': 'o', 'ğ': 'g', 
+					'ş': 's', 'ı': 'i', 'ç': 'c', 'ü': 'u', 'ö': 'o', 'ğ': 'g',
 
 					// Russian
 					'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
@@ -120,53 +120,53 @@
 					'є': 'ye', 'і': 'i', 'ї': 'yi', 'ґ': 'g',
 
 					// Czech
-					'Č': 'C', 'Ď': 'D', 'Ě': 'E', 'Ň': 'N', 'Ř': 'R', 'Š': 'S', 'Ť': 'T', 'Ů': 'U', 
-					'Ž': 'Z', 
+					'Č': 'C', 'Ď': 'D', 'Ě': 'E', 'Ň': 'N', 'Ř': 'R', 'Š': 'S', 'Ť': 'T', 'Ů': 'U',
+					'Ž': 'Z',
 					'č': 'c', 'ď': 'd', 'ě': 'e', 'ň': 'n', 'ř': 'r', 'š': 's', 'ť': 't', 'ů': 'u',
-					'ž': 'z', 
+					'ž': 'z',
 
 					// Polish
-					'Ą': 'A', 'Ć': 'C', 'Ę': 'e', 'Ł': 'L', 'Ń': 'N', 'Ó': 'o', 'Ś': 'S', 'Ź': 'Z', 
-					'Ż': 'Z', 
+					'Ą': 'A', 'Ć': 'C', 'Ę': 'e', 'Ł': 'L', 'Ń': 'N', 'Ó': 'o', 'Ś': 'S', 'Ź': 'Z',
+					'Ż': 'Z',
 					'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z',
 					'ż': 'z',
 
 					// Latvian
-					'Ā': 'A', 'Č': 'C', 'Ē': 'E', 'Ģ': 'G', 'Ī': 'i', 'Ķ': 'k', 'Ļ': 'L', 'Ņ': 'N', 
-					'Š': 'S', 'Ū': 'u', 'Ž': 'Z', 
+					'Ā': 'A', 'Č': 'C', 'Ē': 'E', 'Ģ': 'G', 'Ī': 'i', 'Ķ': 'k', 'Ļ': 'L', 'Ņ': 'N',
+					'Š': 'S', 'Ū': 'u', 'Ž': 'Z',
 					'ā': 'a', 'č': 'c', 'ē': 'e', 'ģ': 'g', 'ī': 'i', 'ķ': 'k', 'ļ': 'l', 'ņ': 'n',
 					'š': 's', 'ū': 'u', 'ž': 'z'
 				};
-				
+
 				// Make custom replacements
 				for (var k in opt.replacements) {
 					s = s.replace(RegExp(k, 'g'), opt.replacements[k]);
 				}
-				
+
 				// Transliterate characters to ASCII
 				if (opt.transliterate) {
 					for (var k in char_map) {
 						s = s.replace(RegExp(k, 'g'), char_map[k]);
 					}
 				}
-				
+
 				// Replace non-alphanumeric characters with our delimiter
 				var alnum = (typeof(XRegExp) === 'undefined') ? RegExp('[^a-z0-9]+', 'ig') : XRegExp('[^\\p{L}\\p{N}]+', 'ig');
 				s = s.replace(alnum, opt.delimiter);
-				
+
 				// Remove duplicate delimiters
 				s = s.replace(RegExp('[' + opt.delimiter + ']{2,}', 'g'), opt.delimiter);
-				
+
 				// Truncate slug to max. characters
 				s = s.substring(0, opt.limit);
-				
+
 				// Remove delimiter from ends
 				s = s.replace(RegExp('(^' + opt.delimiter + '|' + opt.delimiter + '$)', 'g'), '');
-				
+
 				return opt.lowercase ? s.toLowerCase() : s;
 			},
 			change_slug(title, hash) {
-				
+
 				if (hash == this.parent_hash) {
 
 					this.value = this.slugify(title)
@@ -174,7 +174,7 @@
 			},
 		},
 		created() {
-			
+
 			if (this.field.db_title == 'slug' && !this.value) {
 				this.$root.$on('title_changed', this.change_slug)
 			}

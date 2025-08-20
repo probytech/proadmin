@@ -24,7 +24,15 @@
         "laravel": {
             "providers": [
                 "Probytech\\Proadmin\\ProadminServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Lang": "Probytech\\Proadmin\\Facades\\Lang",
+                "Collection": "Probytech\\Proadmin\\Facades\\Collection",
+                "Single": "Probytech\\Proadmin\\Facades\\Single",
+                "SEO": "Probytech\\Proadmin\\Facades\\SEO",
+                "Field": "Probytech\\Proadmin\\Facades\\Field",
+                "ResizeImg": "Probytech\\Proadmin\\Facades\\ResizeImg"
+            }
         }
     }
 }

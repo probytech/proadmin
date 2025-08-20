@@ -66,7 +66,7 @@ async function post(endpoint, obj, is_file = false, is_loader = true) {
 				body: serialize(obj)
 			})
 		}
-		
+
 		let json = []
 
 		try {
@@ -112,12 +112,12 @@ function request (path, params, callback, onerror) {
 		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 		data: params,
 		success: function(data) {
-			if (callback != undefined) 
+			if (callback != undefined)
 				callback(data)
 			loading(false)
 		},
 		error: function(data) {
-			if (onerror != undefined) 
+			if (onerror != undefined)
 				onerror(data)
 			loading(false)
 		}
@@ -136,12 +136,12 @@ function request_file (path, params, callback, onerror) {
 		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 		data: params,
 		success: function(data) {
-			if (callback != undefined) 
+			if (callback != undefined)
 				callback(data)
 			loading(false)
 		},
 		error: function(data) {
-			if (onerror != undefined) 
+			if (onerror != undefined)
 				onerror(data)
 			loading(false)
 		}
@@ -159,7 +159,7 @@ function loading (is_load) {
 			clearTimeout(timeout_loading)
 
 		timeout_loading = setTimeout(()=>{
-			
+
 			$('#loader').removeClass('active')
 		}, 200)
 	}
@@ -264,7 +264,7 @@ const req = {
 					// body: this.serialize(obj)
 				})
 			}
-			
+
 			let json = []
 
 			try {

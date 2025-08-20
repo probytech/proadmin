@@ -1,66 +1,71 @@
 <?php
 
-use App\Proadmin\Controllers\AdminController;
-use App\Proadmin\Controllers\DocsController;
-use App\Proadmin\Controllers\ImportExportController;
-use App\Proadmin\Controllers\SingleController;
-use App\Proadmin\Controllers\LanguageController;
-use App\Proadmin\Controllers\MigrationController;
+use Probytech\Proadmin\Controllers\AdminController;
+use Probytech\Proadmin\Controllers\DocsController;
+use Probytech\Proadmin\Controllers\ImportExportController;
+use Probytech\Proadmin\Controllers\SingleController;
+use Probytech\Proadmin\Controllers\LanguageController;
+use Probytech\Proadmin\Controllers\MigrationController;
+use Probytech\Proadmin\Facades\Lang;
+use Illuminate\Support\Facades\Route;
 
-Route::post('/sign-in', [AdminController::class, 'signIn']);
-Route::post('/admin/logout', [AdminController::class, 'logout']);
-Route::get('/login', [AdminController::class, 'login']);
+Route::middleware('web')
+->prefix('admin')
+->group(function () {
 
-Route::group([
-	'middleware'    => [\App\Proadmin\Middleware\AdminOnly::class],
-], function() {
+    Route::get('login', [AdminController::class, 'login'])->name('admin-login');
+    Route::post('sign-in', [AdminController::class, 'signIn'])->name('admin-sign-in');
+    Route::get('logout', [AdminController::class, 'logout'])->name('admin-logout');
 
-	Route::group(['prefix' => 'laravel-filemanager'], function() {
-		\UniSharp\LaravelFilemanager\Lfm::routes();
-	});
+    Route::group([
+        'middleware'    => [\Probytech\Proadmin\Middleware\AdminOnly::class],
+    ], function() {
 
-	Route::get('/admin', [AdminController::class, 'admin']);
+        Route::group(['prefix' => 'laravel-filemanager'], function() {
+            \UniSharp\LaravelFilemanager\Lfm::routes();
+        });
 
-	Route::group([
-		'prefix' => Lang::prefix(),
-	], function() {
+        Route::get('/', [AdminController::class, 'admin'])->name('admin');
 
-		Route::get('/admin/api/single/{id}',	[SingleController::class, 'show']);
-		Route::put('/admin/api/single/{id}',	[SingleController::class, 'update']);
-		Route::delete('/admin/api/single/{id}',	[SingleController::class, 'destroy']);
-	});
+        Route::group([
+            'prefix' => Lang::prefix(),
+        ], function() {
 
-	Route::post('/admin/get-docs', [DocsController::class, 'index']);
+            Route::get('api/single/{id}',	[SingleController::class, 'show'])->name('admin-single-show');
+            Route::put('api/single/{id}',	[SingleController::class, 'update'])->name('admin-single-update');
+            Route::delete('api/single/{id}',	[SingleController::class, 'destroy'])->name('admin-single-destroy');
+        });
 
-	Route::post('/admin/api/language/{tag}', 	[LanguageController::class, 'post']);
-	Route::delete('/admin/api/language/{tag}',	[LanguageController::class, 'delete']);
+        Route::post('get-docs', [DocsController::class, 'index'])->name('admin-docs-index');
 
-	Route::post('/admin/update-dropdown', [AdminController::class, 'updateDropdown']);
-	Route::post('/admin/get-menu', [AdminController::class, 'getMenu']);
+        Route::post('api/language/{tag}', 	[LanguageController::class, 'post'])->name('admin-language-create');
+        Route::delete('api/language/{tag}',	[LanguageController::class, 'delete'])->name('admin-language-destroy');
 
-	Route::post('/admin/get-dynamic', [AdminController::class, 'getDynamic']);
-	Route::post('/admin/set-dynamic', [AdminController::class, 'setDynamic']);
-	Route::post('/admin/save-editable', [AdminController::class, 'saveEditable']);
+        Route::post('update-dropdown', [AdminController::class, 'updateDropdown'])->name('admin-dropdown-update');
+        Route::post('get-menu', [AdminController::class, 'getMenu'])->name('admin-menu-index');
 
-	Route::post('/admin/db-copy', [AdminController::class, 'dbCopy']);
-	Route::post('/admin/db-count', [AdminController::class, 'dbCount']);
-	Route::post('/admin/db-select', [AdminController::class, 'dbSelect']);
-	Route::post('/admin/db-remove-row', [AdminController::class, 'dbRemoveRow']);
-	Route::post('/admin/db-remove-rows', [AdminController::class, 'dbRemoveRows']);
+        Route::post('get-dynamic', [AdminController::class, 'getDynamic'])->name('admin-dynamic-get');
+        Route::post('set-dynamic', [AdminController::class, 'setDynamic'])->name('admin-dynamic-set');
+        Route::post('save-editable', [AdminController::class, 'saveEditable'])->name('admin-editable-save');
 
-	Route::post('/admin/db-create-table', [MigrationController::class, 'createTable']);
-	Route::post('/admin/db-remove-table', [MigrationController::class, 'removeTable']);
-	Route::post('/admin/db-update-table', [MigrationController::class, 'updateTable']);
+        Route::post('db-copy', [AdminController::class, 'dbCopy'])->name('admin-db-copy');
+        Route::post('db-count', [AdminController::class, 'dbCount'])->name('admin-db-count');
+        Route::post('db-select', [AdminController::class, 'dbSelect'])->name('admin-db-select');
+        Route::post('db-remove-row', [AdminController::class, 'dbRemoveRow'])->name('admin-db-remove-row');
+        Route::post('db-remove-rows', [AdminController::class, 'dbRemoveRows'])->name('admin-db-remove-rows');
 
-	Route::post('/admin/single-edit', [SingleController::class, 'singleEdit']);
-	Route::post('/admin/single-remove', [SingleController::class, 'singleRemove']);
+        Route::post('db-create-table', [MigrationController::class, 'createTable'])->name('admin-db-create-table');
+        Route::post('db-remove-table', [MigrationController::class, 'removeTable'])->name('admin-db-remove-table');
+        Route::post('db-update-table', [MigrationController::class, 'updateTable'])->name('admin-db-update-table');
 
-	Route::post('/admin/upload-image', [AdminController::class, 'uploadImage']);
+        Route::post('single-edit', [SingleController::class, 'singleEdit'])->name('admin-single-edit');
+        Route::post('single-remove', [SingleController::class, 'singleRemove'])->name('admin-single-remove');
 
-	Route::post('/admin/get-mainpage', [AdminController::class, 'getMainpage']);
+        Route::post('upload-image', [AdminController::class, 'uploadImage'])->name('admin-upload-image');
 
-	Route::get('/admin/export/{table}', [ImportExportController::class, 'export'])->name('admin-export');
-	Route::post('/admin/import/{table}', [ImportExportController::class, 'import'])->name('admin-import');	
-	
-	Route::get('/admin/{any}', [AdminController::class, 'admin'])->where('any', '.*');
+        Route::get('export/{table}', [ImportExportController::class, 'export'])->name('admin-export');
+        Route::post('import/{table}', [ImportExportController::class, 'import'])->name('admin-import');
+
+        Route::get('{any}', [AdminController::class, 'admin'])->where('any', '.*');
+    });
 });

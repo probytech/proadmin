@@ -1,18 +1,18 @@
 <script type="text/x-template" id="template-field-datetime">
-	<div class="form-group">
-		
-		<div class="field-title">
-			<label class="edit-field-title control-label" v-text="field.title"></label>
-			
-			<div class="field-remark" v-if="field.remark">
+	<div class="w-full">
+
+		<div class="flex items-center gap-2 mb-1">
+			<label class="text-base font-bold" v-text="field.title"></label>
+
+			<div class="text-sm text-grey" v-if="field.remark">
 				i
-				<div class="field-remark-modal" v-text="field.remark"></div>
+				<div class="text-base" v-text="field.remark"></div>
 			</div>
 		</div>
 
-		<div class="edit-field-inner">
-			<input class="form-control datetimepicker" data-init="0" type="text" :id="id" v-on:change="error = ''">
-			<div class="input-error" v-text="error"></div>
+		<div class="w-full">
+			<input class="datetimepicker w-full text-base px-4 py-2 appearance-none border border-stroke rounded-sm ring-0 focus:ring-0 outline-0 focus:outline-none" data-init="0" type="text" :id="id" v-on:change="error = ''">
+			<div class="text-red-600 text-sm" v-text="error"></div>
 		</div>
 	</div>
 </script>
@@ -59,9 +59,9 @@
 			const app = this
 			const today = new Date()
 			let date = today.getFullYear() + '-' +
-				(today.getMonth()+1).toString().padStart(2, '0') + '-' + 
-				today.getDate().toString().padStart(2, '0') + ' ' + 
-				today.getHours().toString().padStart(2, '0') + ':' + 
+				(today.getMonth()+1).toString().padStart(2, '0') + '-' +
+				today.getDate().toString().padStart(2, '0') + ' ' +
+				today.getHours().toString().padStart(2, '0') + ':' +
 				today.getMinutes().toString().padStart(2, '0')
 
 			if (this.value)
@@ -76,15 +76,15 @@
 						const save_date = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000);
 						app.value = save_date.getUTCFullYear() + '-' +
 							('00' + (save_date.getUTCMonth()+1)).slice(-2) + '-' +
-							('00' + save_date.getUTCDate()).slice(-2) + ' ' + 
-							('00' + save_date.getUTCHours()).slice(-2) + ':' + 
-							('00' + save_date.getUTCMinutes()).slice(-2) + ':' + 
+							('00' + save_date.getUTCDate()).slice(-2) + ' ' +
+							('00' + save_date.getUTCHours()).slice(-2) + ':' +
+							('00' + save_date.getUTCMinutes()).slice(-2) + ':' +
 							('00' + save_date.getUTCSeconds()).slice(-2)
 					}
 				})
 				$('#' + this.id).attr('data-init', '1')
 			}
-			
+
 			$('#' + this.id).val( date )
 		},
 	})

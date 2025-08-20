@@ -1,29 +1,31 @@
 <script type="text/x-template" id="template-field-gallery">
-	<div class="form-group">
-		
-		<div class="field-title">
-			<label class="edit-field-title control-label" v-text="field.title"></label>
-			
-			<div class="field-remark" v-if="field.remark">
+	<div class="w-full">
+
+		<div class="flex items-center gap-2 mb-1">
+			<label class="text-base font-bold" v-text="field.title"></label>
+
+			<div class="text-sm text-grey" v-if="field.remark">
 				i
-				<div class="field-remark-modal" v-text="field.remark"></div>
+				<div class="text-base" v-text="field.remark"></div>
 			</div>
 		</div>
 
-		<div class="edit-field-inner">
+		<div class="w-full flex flex-col items-start">
 			<template v-for="(item, index) in value">
-				<input class="form-control gallery-margin-top" type="text" v-model="value[index]">
-				<div class="photo-preview-wrapper">
-					<img :src="value[index]" alt="" class="photo-preview-img">
-					<div class="btn-delete-photo" v-on:click="remove_gallery(index)">
-						<svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M4.88111 4.00023L7.8722 1.00901C7.95447 0.926667 7.99987 0.816813 8 0.699675C8 0.582472 7.9546 0.472488 7.8722 0.390277L7.61008 0.128228C7.52767 0.0456915 7.41782 0.000488281 7.30055 0.000488281C7.18348 0.000488281 7.07363 0.0456915 6.99122 0.128228L4.00013 3.11925L1.00891 0.128228C0.926634 0.0456915 0.816715 0.000488281 0.699512 0.000488281C0.582439 0.000488281 0.47252 0.0456915 0.390244 0.128228L0.128 0.390277C-0.0426667 0.560944 -0.0426667 0.838537 0.128 1.00901L3.11915 4.00023L0.128 6.99132C0.0456585 7.07379 0.000325203 7.18364 0.000325203 7.30078C0.000325203 7.41792 0.0456585 7.52777 0.128 7.61018L0.390179 7.87223C0.472455 7.9547 0.582439 7.99997 0.699447 7.99997C0.81665 7.99997 0.926569 7.9547 1.00885 7.87223L4.00006 4.88114L6.99115 7.87223C7.07356 7.9547 7.18341 7.99997 7.30049 7.99997H7.30062C7.41776 7.99997 7.52761 7.9547 7.61002 7.87223L7.87213 7.61018C7.95441 7.52784 7.9998 7.41792 7.9998 7.30078C7.9998 7.18364 7.95441 7.07379 7.87213 6.99138L4.88111 4.00023Z" fill="#7F7F7F"/>
-						</svg>
-					</div>
-				</div>
+                <div class="w-full flex flex-col items-start">
+                    <input class="mb-4 w-full text-base px-4 py-2 appearance-none border border-stroke rounded-sm ring-0 focus:ring-0 outline-0 focus:outline-none" type="text" v-model="value[index]">
+                    <div class="flex items-center gap-2 mb-2 relative">
+                        <img :src="value[index]" alt="" class="w-32 rounded-sm bg-background padding-2">
+                        <div class="absolute -top-3 -right-3 bg-background rounded-full w-8 h-8 flex items-center justify-center text-white cursor-pointer hover:bg-stroke duration-300" v-on:click="remove_gallery(index)">
+                            <svg class="w-2 h-2" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.88111 4.00023L7.8722 1.00901C7.95447 0.926667 7.99987 0.816813 8 0.699675C8 0.582472 7.9546 0.472488 7.8722 0.390277L7.61008 0.128228C7.52767 0.0456915 7.41782 0.000488281 7.30055 0.000488281C7.18348 0.000488281 7.07363 0.0456915 6.99122 0.128228L4.00013 3.11925L1.00891 0.128228C0.926634 0.0456915 0.816715 0.000488281 0.699512 0.000488281C0.582439 0.000488281 0.47252 0.0456915 0.390244 0.128228L0.128 0.390277C-0.0426667 0.560944 -0.0426667 0.838537 0.128 1.00901L3.11915 4.00023L0.128 6.99132C0.0456585 7.07379 0.000325203 7.18364 0.000325203 7.30078C0.000325203 7.41792 0.0456585 7.52777 0.128 7.61018L0.390179 7.87223C0.472455 7.9547 0.582439 7.99997 0.699447 7.99997C0.81665 7.99997 0.926569 7.9547 1.00885 7.87223L4.00006 4.88114L6.99115 7.87223C7.07356 7.9547 7.18341 7.99997 7.30049 7.99997H7.30062C7.41776 7.99997 7.52761 7.9547 7.61002 7.87223L7.87213 7.61018C7.95441 7.52784 7.9998 7.41792 7.9998 7.30078C7.9998 7.18364 7.95441 7.07379 7.87213 6.99138L4.88111 4.00023Z" fill="#7F7F7F"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
 			</template>
-			<div class="btn btn-primary gallery-margin-top" v-on:click="add_gallery()">{{ __('proadmin.add_field') }}</div>
-			<div class="input-error" v-text="error"></div>
+			<div class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg cursor-pointer hover:bg-hover duration-300" v-on:click="add_gallery()">{{ __('Add') }}</div>
+			<div class="text-red-600 text-sm" v-text="error"></div>
 		</div>
 	</div>
 </script>
@@ -48,12 +50,12 @@
 				return true
 			},
 			add_gallery() {
-				window.open('/laravel-filemanager?type=image', 'FileManager', 'width=900,height=600');
+				window.open('/admin/laravel-filemanager?type=image', 'FileManager', 'width=900,height=600');
 				window.SetUrl = (items)=>{
 					if (this.value)
 						var arr = this.value
 					else  var arr = []
-					
+
 					for (var i = 0; i < items.length; i++) {
 						var url = items[i].url.replace(/^.*\/\/[^\/]+/, '')
 
@@ -65,7 +67,7 @@
 					this.$forceUpdate()
 				};
 
-				
+
 			},
 			remove_gallery(index) {
 				this.value.splice(index, 1)

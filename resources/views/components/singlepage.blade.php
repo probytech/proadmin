@@ -1,14 +1,14 @@
 <template id="template-singlepage">
-	<div class="single">
+	<div>
 
 		<div v-for="block in blocks">
-			<h1 v-text="block.title"></h1>
-			<div class="field-repeat-values">
-				<component :is="'template-field-' + field.type" :field="field" v-for="field in block.fields" :key="field.id"></component>					
+			<h1 class="text-xl font-bold mb-5" v-text="block.title"></h1>
+			<div class="bg-white rounded-xl p-5 py-8 px-10 mb-5 flex flex-col gap-4">
+				<component :is="'template-field-' + field.type" :field="field" v-for="field in block.fields" :key="field.id"></component>
 			</div>
 		</div>
 
-		<button class="btn btn-primary" v-on:click="save()">{{ __('proadmin.save') }}</button>
+		<button class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg cursor-pointer hover:bg-hover duration-300" v-on:click="save()">{{ __('Save') }}</button>
 	</div>
 </template>
 
@@ -63,7 +63,7 @@
 				var last = field.repeat[field.repeat.length - 1]
 
 				for (var i = 0, length = field.value.length; i < length; i++) {
-					
+
 					last.push({
 						id: i,
 						title: field.value[i].title,
@@ -71,7 +71,7 @@
 						value: '',
 					})
 				}
-				
+
 				this.$forceUpdate()
 			},
 			async delete_single(id) {
@@ -82,12 +82,12 @@
 				const response = await post('/admin/delete-single', {
 					id: id,
 				})
-				
+
 				if (!response.success) {
 					alert('Error')
 					return
 				}
-				
+
 				location.reload()
 			}
 		},

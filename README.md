@@ -61,7 +61,7 @@ Enjoy 🎉
 
 # Usage of CRUD generator
 
-- Go to https://yourdomain.com/admin/menu
+- Go to https://yourdomain.com/admin/collections
 - Fill the fields:
   - **CRUD name** - the table name for the collection
   - **CRUD title** - the title for the collection

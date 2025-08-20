@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+    --color-white: #FFFFFF;
+    --color-primary: #1467E5;
+    --color-hover: #165BC3;
+    --color-background: #F1F0F0;
+    --color-stroke: #E3E3E3;
+    --color-grey: #7F7F7F;
+    --color-light-grey: #224c5d0a;
+
+    --font-sans: "Nunito Sans", "sans-serif";
+    --font-inter: "Inter", "sans-serif";
+}
+
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 10001;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+}
+
+#loader.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.vs__actions {
+    @apply !hidden;
+}
+
+.vs__search,
+.vs__search:focus {
+    @apply m-0;
+}
+
+.vs--single.vs--open .vs__selected {
+    @apply relative;
+}
+
+.vs__dropdown-option--highlight {
+    @apply bg-primary !text-white;
+}
+
+.vs__dropdown-toggle {
+    @apply p-0 h-full border-none;
+}
+
+.vs__selected {
+    @apply m-0;
+}
+
+.vs__dropdown-option {
+    @apply px-4 py-2;
+}
+
+.relationship-many .vs__selected-options {
+    @apply flex flex-wrap gap-2;
+}
+
+.relationship-many .vs__selected {
+    @apply bg-primary text-white border-none !px-3 !py-1;
+}
+
+.relationship-many .vs__deselect path {
+    @apply fill-white;
+}
+
+.relationship-many .vs__deselect {
+    @apply ml-2;
+}
+
+.relationship-many .vs__deselect svg {
+    @apply w-2 h-2;
+}
+
+.vs__selected {
+    @apply !px-0
+}

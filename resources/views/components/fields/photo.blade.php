@@ -1,22 +1,22 @@
 <script type="text/x-template" id="template-field-photo">
-	<div class="form-group" v-on:dragenter="dragenter" v-on:dragleave="dragleave" v-on:dragover="dragover" v-on:drop="drop">
-		
-		<div class="field-title">
-			<label class="edit-field-title control-label" v-text="field.title"></label>
-			
-			<div class="field-remark" v-if="field.remark">
+	<div class="w-full" v-on:dragenter="dragenter" v-on:dragleave="dragleave" v-on:dragover="dragover" v-on:drop="drop">
+
+		<div class="flex items-center gap-2 mb-1">
+			<label class="text-base font-bold" v-text="field.title"></label>
+
+			<div class="text-sm text-grey" v-if="field.remark">
 				i
-				<div class="field-remark-modal" v-text="field.remark"></div>
+				<div class="text-base" v-text="field.remark"></div>
 			</div>
 		</div>
-		
-		<div class="edit-field-inner">
-			<input class="form-control" type="text" :id="field.db_title" v-model="value" v-on:change="error = ''">
-			<div class="photo-preview-wrapper">
-				<img :src="value" alt="" class="photo-preview-img">
-				<div class="btn btn-primary" v-on:click="add_photo(field.db_title)">{{ __('proadmin.add_field') }}</div>
+
+		<div class="w-full">
+			<div class="flex items-center gap-2 mb-2">
+			    <input class="w-full text-base px-4 py-2 appearance-none border border-stroke rounded-sm ring-0 focus:ring-0 outline-0 focus:outline-none" type="text" :id="field.db_title" v-model="value" v-on:change="error = ''">
+				<div class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg cursor-pointer hover:bg-hover duration-300" v-on:click="add_photo(field.db_title)">{{ __('Add') }}</div>
 			</div>
-			<div class="input-error" v-text="error"></div>
+            <img :src="value" alt="" class="w-32 rounded-sm bg-background padding-2">
+			<div class="text-red-600 text-sm" v-text="error"></div>
 		</div>
 	</div>
 </script>
@@ -47,7 +47,7 @@
 			async drop(e){
 				e.preventDefault()
 				e.stopPropagation()
-				
+
 				if (e.buttons == 0 && e.dataTransfer.items.length > 0) {
 
 					const img = e.dataTransfer.items[0]
@@ -91,13 +91,13 @@
 			},
 			add_photo(id) {
 
-				window.open('/laravel-filemanager?type=image', 'FileManager', 'width=900,height=600');
+				window.open('/admin/laravel-filemanager?type=image', 'FileManager', 'width=900,height=600');
 				window.SetUrl = (items)=>{
 
 					for (var i = 0; i < items.length; i++) {
 
 						var url = items[i].url.replace(/^.*\/\/[^\/]+/, '')
-						
+
 						this.value = decodeURIComponent(url)
 
 						break;

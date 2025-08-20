@@ -1,18 +1,18 @@
 <script type="text/x-template" id="template-field-ckeditor">
-	<div class="form-group">
-		
-		<div class="field-title">
-			<label class="edit-field-title control-label" v-text="field.title"></label>
-			
-			<div class="field-remark" v-if="field.remark">
+	<div class="w-full">
+
+		<div class="flex items-center gap-2 mb-1">
+			<label class="text-base font-bold" v-text="field.title"></label>
+
+			<div class="text-sm text-grey" v-if="field.remark">
 				i
-				<div class="field-remark-modal" v-text="field.remark"></div>
+				<div class="text-base" v-text="field.remark"></div>
 			</div>
 		</div>
 
-		<div class="edit-field-inner">
-			<ckeditor :config="editorConfig" :editor="editor" class="form-control" v-model="value"></ckeditor>
-			<div class="input-error" v-text="error"></div>
+		<div class="w-full">
+			<ckeditor :config="editorConfig" :editor="editor" v-model="value"></ckeditor>
+			<div class="text-red-600 text-sm" v-text="error"></div>
 		</div>
 	</div>
 </script>
@@ -49,10 +49,10 @@
 
 					if (this.field.required != 'optional') {
 
-						this.error = '{{ __('proadmin.required_field') }}'
+						this.error = '{{ __('Required field') }}'
 
 					} else if (this.field.required == 'required_once') {
-						
+
 						// TODO
 
 					} else {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Proadmin\Handlers;
+namespace Probytech\Proadmin\Handlers;
 
 
 class LfmConfigHandler extends \UniSharp\LaravelFilemanager\Handlers\ConfigHandler
