@@ -10,11 +10,11 @@ use Probytech\Proadmin\Services\SingleService;
 
 class ProadminServiceProvider extends ServiceProvider
 {
-    public $singletons = [
-        'lang' 		    => LanguageService::class,
-		'single' 	    => SingleService::class,
-		'collection' 	=> CollectionService::class,
-    ];
+    // public $singletons = [
+    //  'lang' 		    => LanguageService::class,
+	// 	'single' 	    => SingleService::class,
+	// 	'collection' 	=> CollectionService::class,
+    // ];
 
 	public function boot()
 	{
