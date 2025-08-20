@@ -39,6 +39,7 @@ class ProadminInstall extends Command {
 	{
 		$this->info('Please note: Proadmin requires fresh Laravel installation!');
 
+        Artisan::call('vendor:publish', ['--tag' => 'lfm_public']);
         Artisan::call('vendor:publish', ['--provider' => 'Probytech\Proadmin\ProadminServiceProvider']);
 
         $this->info('Published successfully!');
