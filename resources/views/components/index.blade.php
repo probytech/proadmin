@@ -262,7 +262,7 @@
 					where = where_arr.join(' OR ')
 				}
 
-				var select = this.get_search_table_menu() + '.*'
+				var select = '`' + this.get_search_table_menu() + '`.*'
 
 				var join = []
 				for (var i = this.menu_item.fields.length - 1; i >= 0; i--) {
@@ -277,7 +277,7 @@
 							short: field.relationship_table_name,
 							full: field_relationship_table_name,
 						})
-						select += ', ' + field_relationship_table_name + '.' + field.relationship_view_field + ' AS ' +
+						select += ', `' + field_relationship_table_name + '`.' + field.relationship_view_field + ' AS ' +
 							field.relationship_table_name + '_' + field.relationship_view_field
 					}
 				}
