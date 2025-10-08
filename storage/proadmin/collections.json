@@ -76,7 +76,7 @@
         "is_soft_delete": 0,
         "sort": 1,
         "dropdown_id": 0,
-        "icon": "\/vendor\/proadmin\/icons\/15.svg",
+        "icon": "\/storage\/vendor\/proadmin\/icons\/15.svg",
         "model": "",
         "type": "multiple"
     }
