@@ -20,7 +20,7 @@ class ResizeImg
 
 		$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-		$site_path = str_contains($path, 'storage/') ? storage_path() : public_path();
+		$site_path = str_contains($originalPath, 'storage/') ? storage_path() : public_path();
 		$is_chrome = strpos($ua, 'Chrome') !== false || strpos($ua, 'Firefox') !== false;
 
 		preg_match('/[^\/]+\.(jpg|jpeg|png|JPG|JPEG|PNG|webp)$/', $path, $match);
