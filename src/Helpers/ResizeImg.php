@@ -1,36 +1,44 @@
-<?php 
+<?php
 
 namespace Probytech\Proadmin\Helpers;
 
 class ResizeImg
 {
+    public const QUALITY = 100;
+
 	public static function get($path, $width, $height)
 	{
 		if (!function_exists('imagewebp')) {
 			return $path;
 		}
-		
+
+        $originalPath = $path;
+
+		$path = str_replace('storage/', 'app/public/', $path);
+
 		$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-		$site_path = public_path();
+		$site_path = storage_path();
 		$is_chrome = strpos($ua, 'Chrome') !== false || strpos($ua, 'Firefox') !== false;
 
-		preg_match('/[^\/]+\.(jpg|jpeg|png|JPG|JPEG|PNG)$/', $path, $match);
+		preg_match('/[^\/]+\.(jpg|jpeg|png|JPG|JPEG|PNG|webp)$/', $path, $match);
 
 		if (isset($match[0]))
 			$filename = $match[0];
-		else return $path;
+		else return $originalPath;
 
 		if (isset($match[1]))
 			$format = $match[1];
-		else return $path;
+		else return $originalPath;
 
-		if ($format != 'jpg' && $format != 'jpeg' && $format != 'png' && $format != 'JPG' && $format != 'JPEG' && $format != 'PNG')
-			return $path;
+		if ($format != 'jpg' && $format != 'jpeg' && $format != 'png' && $format != 'JPG' && $format != 'JPEG' && $format != 'PNG' && $format != 'webp')
+			return $originalPath;
 
 		$path = str_replace($filename, '', $path);
 
 		$real_path = rtrim($site_path, '/').$path;
+
+		$path = str_replace('app/public/', 'storage/', $path);
 
 		if (!file_exists($real_path.$filename))
 			return $path.$filename;
@@ -73,8 +81,10 @@ class ResizeImg
 
 				if ($format == 'png')
 					imagepng($scaled_img, $real_path.'thumb/'.$width.'_'.$filename);
+				else if ($format == 'webp')
+					imagewebp($scaled_img, $real_path.'thumb/'.$width.'_'.$filename);
 				else {
-					imagejpeg($scaled_img, $real_path.'thumb/'.$width.'_'.$filename, 83);
+					imagejpeg($scaled_img, $real_path.'thumb/'.$width.'_'.$filename, self::QUALITY);
 				}
 				imagewebp($scaled_img, $real_path.'thumb/'.$width.'_'.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
 

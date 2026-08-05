@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Probytech\Proadmin\Helpers;
 
@@ -35,6 +35,11 @@ class Field
 	public static function bracketToSpan($str)
 	{
 		return str_replace(["[", "]"], ['<span>', '</span>'], $str);
+	}
+
+    public static function withoutSpan($str)
+	{
+		return str_replace(["[", "]"], ['', ''], $str);
 	}
 
 	public static function contentImages($str)
