@@ -29,9 +29,9 @@
                 "Lang": "Probytech\\Proadmin\\Facades\\Lang",
                 "Collection": "Probytech\\Proadmin\\Facades\\Collection",
                 "Single": "Probytech\\Proadmin\\Facades\\Single",
-                "SEO": "Probytech\\Proadmin\\Facades\\SEO",
-                "Field": "Probytech\\Proadmin\\Facades\\Field",
-                "ResizeImg": "Probytech\\Proadmin\\Facades\\ResizeImg"
+                "SEO": "Probytech\\Proadmin\\Helpers\\SEO",
+                "Field": "Probytech\\Proadmin\\Helpers\\Field",
+                "ResizeImg": "Probytech\\Proadmin\\Helpers\\ResizeImg"
             }
         }
     }
