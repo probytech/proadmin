@@ -20,7 +20,7 @@ class ResizeImg
 
 		$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-		$site_path = storage_path();
+		$site_path = str_contains($path, 'storage/') ? storage_path() : public_path();
 		$is_chrome = strpos($ua, 'Chrome') !== false || strpos($ua, 'Firefox') !== false;
 
 		preg_match('/[^\/]+\.(jpg|jpeg|png|JPG|JPEG|PNG|webp)$/', $path, $match);
@@ -77,18 +77,18 @@ class ResizeImg
 
 			if ($image != false) {
 
-				$scaled_img = imagescale($image, $width_resize + 1, $height_resize + 1);
+				$scaled_img = self::resample($image, $width_resize, $height_resize);
 
 				imagedestroy($image);
 
 				if ($format == 'png')
-					imagepng($scaled_img, $real_path.$prefix.$filename);
+					imagepng($scaled_img, $real_path.$prefix.$filename, self::pngQuality($quality));
 				else if ($format == 'webp')
-					imagewebp($scaled_img, $real_path.$prefix.$filename);
+					imagewebp($scaled_img, $real_path.$prefix.$filename, $quality);
 				else {
-					imagejpeg($scaled_img, $real_path.$prefix.$filename, self::QUALITY);
+					imagejpeg($scaled_img, $real_path.$prefix.$filename, $quality);
 				}
-				imagewebp($scaled_img, $real_path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
+				imagewebp($scaled_img, $real_path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename), $quality);
 
 				imagedestroy($scaled_img);
 
@@ -103,7 +103,7 @@ class ResizeImg
 				$image = imagecreatefromstring(file_get_contents($real_path.$filename));
 
 				if ($image != false)
-					imagewebp($image, $real_path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
+					imagewebp($image, $real_path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename), $quality);
 			}
 
 			if ($is_chrome)
@@ -112,5 +112,27 @@ class ResizeImg
 		}
 
 		return $path.$filename;
+	}
+
+	private static function resample($image, float $width, float $height)
+	{
+		$width = max(1, (int) round($width));
+		$height = max(1, (int) round($height));
+
+		$resized = imagecreatetruecolor($width, $height);
+
+		imagealphablending($resized, false);
+		imagesavealpha($resized, true);
+		$transparent = imagecolorallocatealpha($resized, 0, 0, 0, 127);
+		imagefilledrectangle($resized, 0, 0, $width, $height, $transparent);
+
+		imagecopyresampled($resized, $image, 0, 0, 0, 0, $width, $height, imagesx($image), imagesy($image));
+
+		return $resized;
+	}
+
+	private static function pngQuality(int $quality): int
+	{
+		return (int) round((100 - min(100, max(0, $quality))) / 100 * 9);
 	}
 }
