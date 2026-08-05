@@ -128,7 +128,20 @@ class ResizeImg
 
 		imagecopyresampled($resized, $image, 0, 0, 0, 0, $width, $height, imagesx($image), imagesy($image));
 
+		self::sharpen($resized);
+
 		return $resized;
+	}
+
+	private static function sharpen($image): void
+	{
+		$matrix = [
+			[-1, -1, -1],
+			[-1, 20, -1],
+			[-1, -1, -1],
+		];
+
+		imageconvolution($image, $matrix, array_sum(array_map('array_sum', $matrix)), 0);
 	}
 
 	private static function pngQuality(int $quality): int
