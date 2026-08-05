@@ -6,11 +6,13 @@ class ResizeImg
 {
     public const QUALITY = 100;
 
-	public static function get($path, $width, $height)
+	public static function get(string $path, int $width, int $height, int $quality = self::QUALITY)
 	{
 		if (!function_exists('imagewebp')) {
 			return $path;
 		}
+
+        $prefix = 'thumb/'.$width.'_'.($quality != self::QUALITY ? $quality.'_' : '');
 
         $originalPath = $path;
 
@@ -46,10 +48,10 @@ class ResizeImg
 		if (!file_exists($real_path.'thumb'))
 			mkdir($real_path.'thumb');
 
-		if (file_exists($real_path.'thumb/'.$width.'_'.$filename)) {
+		if (file_exists($real_path.$prefix.$filename)) {
 			if ($is_chrome)
-				return $path.'thumb/'.$width.'_'.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename);
-			return $path.'thumb/'.$width.'_'.$filename;
+				return $path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename);
+			return $path.$prefix.$filename;
 		}
 
 		$imagesize = getimagesize($real_path.$filename);	// getimagesize - read all img and then get it info
@@ -80,33 +82,33 @@ class ResizeImg
 				imagedestroy($image);
 
 				if ($format == 'png')
-					imagepng($scaled_img, $real_path.'thumb/'.$width.'_'.$filename);
+					imagepng($scaled_img, $real_path.$prefix.$filename);
 				else if ($format == 'webp')
-					imagewebp($scaled_img, $real_path.'thumb/'.$width.'_'.$filename);
+					imagewebp($scaled_img, $real_path.$prefix.$filename);
 				else {
-					imagejpeg($scaled_img, $real_path.'thumb/'.$width.'_'.$filename, self::QUALITY);
+					imagejpeg($scaled_img, $real_path.$prefix.$filename, self::QUALITY);
 				}
-				imagewebp($scaled_img, $real_path.'thumb/'.$width.'_'.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
+				imagewebp($scaled_img, $real_path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
 
 				imagedestroy($scaled_img);
 
-				return $path.'thumb/'.$width.'_'.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename);
+				return $path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename);
 			}
 		} else {
 
-			if (!copy($real_path.$filename, $real_path.'thumb/'.$width.'_'.$filename)) {
+			if (!copy($real_path.$filename, $real_path.$prefix.$filename)) {
 				return $path.$filename;
 			} else {
 
 				$image = imagecreatefromstring(file_get_contents($real_path.$filename));
 
 				if ($image != false)
-					imagewebp($image, $real_path.'thumb/'.$width.'_'.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
+					imagewebp($image, $real_path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename));
 			}
 
 			if ($is_chrome)
-				return $path.'thumb/'.$width.'_'.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename);
-			return $path.'thumb/'.$width.'_'.$filename;
+				return $path.$prefix.str_replace(['.png', '.jpg', '.jpeg', '.PNG', '.JPEG', '.JPG'], '.webp', $filename);
+			return $path.$prefix.$filename;
 		}
 
 		return $path.$filename;
