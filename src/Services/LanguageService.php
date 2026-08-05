@@ -70,9 +70,9 @@ class LanguageService
 		return str_replace($host, "$host$prefix", $url);
 	}
 
-	public function tr($ua, $ru)
+	public function tr(string $main, string $secondary): string
 	{
-		return self::get() == 'ua' ? $ua : $ru;
+		return self::get() == self::getMain() ? $main : $secondary;
 	}
 
 	public function getUrl($lang, $url = '')
