@@ -16,14 +16,19 @@ class Export implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     protected $collections;
+
     protected $collection;
+
     protected $table;
+
+    protected $menuTable;
 
     public function __construct($table)
     {
         $this->collections = Collection::get()->keyBy('table_name');
         $this->collection = Collection::get()->where('table_name', $table)->first();
         $this->table = $this->collection->multilanguage ? $table.'_'.Lang::get() : $table;
+        $this->menuTable = $table;
     }
 
     public function query()
@@ -41,7 +46,7 @@ class Export implements FromQuery, WithHeadings, WithMapping
 
                 if ($field->lang) {
                     foreach (Lang::getLangs() as $lang) {
-                        $toSelect[] = $this->table.'.'.$field->db_title.' AS '.$field->db_title.'_'.$lang->tag;
+                        $toSelect[] = $this->menuTable.'_'.$lang->tag.'.'.$field->db_title.' AS '.$field->db_title.'_'.$lang->tag;
                     }
                 } else {
                     $toSelect[] = $this->table.'.'.$field->db_title;
@@ -70,7 +75,7 @@ class Export implements FromQuery, WithHeadings, WithMapping
         ->when($this->collection->multilanguage, function($q) {
             foreach (Lang::getLangs() as $lang) {
                 if ($lang->tag != Lang::get()) {
-                    $q->join($this->table, $this->table.'.id', $this->table.'.id');
+                    $q->join($this->menuTable.'_'.$lang->tag, $this->menuTable.'_'.$lang->tag.'.id', $this->table.'.id');
                 }
             }
         })
